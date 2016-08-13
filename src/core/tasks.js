@@ -47,6 +47,7 @@ export async function runTask (task, ctx, next) {
   }
   for (const action of task.actions) {
     const output = await action.fn(ctx, next)
+    Object.assign(ctx.input, output)
 
     for (const path in action.outputs) {
       if (path in output) {

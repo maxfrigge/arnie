@@ -4,7 +4,7 @@ import {
   runTask
 } from '../../src/core/tasks'
 
-test('Create task from flat task definition.', (assert) => {
+test('Create task from flat task definition.', (t) => {
   const actionA = () => {}
   const actionB = () => {}
   const actionC = () => {}
@@ -29,15 +29,15 @@ test('Create task from flat task definition.', (assert) => {
     actionC
   ])
 
-  assert.deepEqual(
+  t.deepEqual(
     actual,
     expected,
     'Given a flat task definition, createTask() should create a valid task.'
   )
-  assert.end()
+  t.end()
 })
 
-test('Create flat task from nested arrays in task definition.', (assert) => {
+test('Create flat task from nested arrays in task definition.', (t) => {
   const actionA = () => {}
   const actionB = () => {}
   const actionC = () => {}
@@ -66,15 +66,15 @@ test('Create flat task from nested arrays in task definition.', (assert) => {
     ]
   ])
 
-  assert.deepEqual(
+  t.deepEqual(
     actual,
     expected,
     'Given a flat task definition, createTask() should create a valid task.'
   )
-  assert.end()
+  t.end()
 })
 
-test('Create a simple task with outputs.', (assert) => {
+test('Create a simple task with outputs.', (t) => {
   const actionA = () => {}
   const actionB = () => {}
   const actionC = () => {}
@@ -126,15 +126,15 @@ test('Create a simple task with outputs.', (assert) => {
     actionC
   ])
 
-  assert.deepEqual(
+  t.deepEqual(
     actual,
     expected,
     'Given a task definition with outputs, createTask() should create a valid task.'
   )
-  assert.end()
+  t.end()
 })
 
-test('Create a complex task from nested definitions.', (assert) => {
+test('Create a complex task from nested definitions.', (t) => {
   const actionA = () => {}
   const actionB = () => {}
   const actionC = () => {}
@@ -223,18 +223,18 @@ test('Create a complex task from nested definitions.', (assert) => {
 
   const actual = createTask(mainTask)
 
-  assert.deepEqual(
+  t.deepEqual(
     actual,
     expected,
     'Given a deeply nested task definition, createTask() should create a valid task.'
   )
-  assert.end()
+  t.end()
 })
 
-test('Run a simple task and pass input along.', (assert) => {
-  assert.plan(3)
+test('Run a simple task and pass input along.', (t) => {
+  t.plan(3)
   const actionA = (ctx) => {
-    assert.equal(
+    t.equal(
       ctx.input.initialInput,
       'foo'
     )
@@ -244,7 +244,7 @@ test('Run a simple task and pass input along.', (assert) => {
     }
   }
   const actionB = (ctx) => {
-    assert.equal(
+    t.equal(
       ctx.input.moreInput,
       'bar'
     )
@@ -257,21 +257,21 @@ test('Run a simple task and pass input along.', (assert) => {
 
   runTask(task, {input: {initialInput: 'foo'}})
   .then((ctx) => {
-    assert.deepEqual(
+    t.deepEqual(
       ctx.input,
       {initialInput: 'foo', moreInput: 'bar'}
     )
   })
 })
 
-test('Run a complex task with paths and nesting.', (assert) => {
-  assert.plan(6)
+test('Run a complex task with paths and nesting.', (t) => {
+  t.plan(6)
   const actionA = (ctx) => {
-    assert.pass('run action')
+    t.pass('run action')
     return {takeThisPath: true}
   }
   const actionB = (ctx) => {
-    assert.deepEqual(
+    t.deepEqual(
       ctx.input,
       {initialInput: 'foo', takeThisPath: true, nestedOutput: true}
     )
@@ -281,12 +281,12 @@ test('Run a complex task with paths and nesting.', (assert) => {
     }
   }
   const shouldRun = async (ctx) => {
-    assert.pass('run async action')
+    t.pass('run async action')
 
     return {nestedOutput: true}
   }
   const shouldNotRun = (ctx) => {
-    assert.fail('should not action')
+    t.fail('should not run this action')
   }
 
   const task = createTask([
@@ -313,7 +313,7 @@ test('Run a complex task with paths and nesting.', (assert) => {
 
   runTask(task, {input: {initialInput: 'foo'}})
   .then((ctx) => {
-    assert.deepEqual(
+    t.deepEqual(
       ctx.input,
       {initialInput: 'changedFoo', takeThisPath: true, nestedOutput: true}
     )

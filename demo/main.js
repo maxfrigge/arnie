@@ -134,12 +134,15 @@ arnie.addTasks({
   wishlist: []
 })
 
-arnie.addTask()
-arnie.addTasks()
-arnie.getTasks()
-arnie.runTask()
-arnie.runAllTasks()
-arnie.middleware()
+// arnie.addTask()
+// arnie.addTasks()
+// arnie.getTasks()
+// arnie.runTask()
+// arnie.runAllTasks()
+arnie.doIt({
+  task1,
+  task2
+})
 
 const app = Koa()
 
