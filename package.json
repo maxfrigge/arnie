@@ -1,33 +1,35 @@
 {
-  "name": "appmate-previews",
+  "name": "koa-arnie",
   "version": "0.1.0",
-  "description": "Preview generator for Appmate",
+  "description": "A real action hero for Koa2",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "babel-tape-runner 'test/**/*.js'",
     "start": "nodemon demo/src/main.js --exec babel-node"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/maxfrigge/appmate-previews.git"
+    "url": "git+https://github.com/maxfrigge/koa-arnie.git"
   },
   "author": "Max Frigge <max.frigge@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/maxfrigge/appmate-previews/issues"
+    "url": "https://github.com/maxfrigge/koa-arnie/issues"
   },
-  "homepage": "https://github.com/maxfrigge/appmate-previews#readme",
+  "homepage": "https://github.com/maxfrigge/koa-arnie#readme",
   "dependencies": {
-    "action-tree": "0.0.1",
-    "koa": "^2.0.0-alpha.3",
+    "check-types": "7.0.0",
     "path-to-regexp": "1.5.3"
   },
   "devDependencies": {
     "babel-cli": "6.11.4",
     "babel-eslint": "6.1.2",
-    "babel-preset-es2015-node5": "1.2.0",
+    "babel-preset-es2015-node6": "0.3.0",
     "babel-preset-stage-3": "6.11.0",
-    "standard": "7.1.2"
+    "faucet": "0.0.1",
+    "koa": "2.0.0-alpha.3",
+    "standard": "7.1.2",
+    "tape": "4.6.0"
   },
   "standard": {
     "parser": "babel-eslint"
