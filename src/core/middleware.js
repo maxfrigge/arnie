@@ -1,11 +1,9 @@
 import pathToRegexp from 'path-to-regexp'
-import { staticTree } from 'action-tree'
 
-function action (path, actions) {
+export default function middleware () {
   const keys = []
   const re = pathToRegexp(path, keys)
-  const actionTree = staticTree(actions)
-
+  const actionTree = createTree(actions)
   return async (ctx, next) => {
     const match = re.exec(ctx.path)
 
@@ -33,26 +31,4 @@ function action (path, actions) {
 
     next()
   }
-}
-
-async function executeTree (branches, actions, ctx, input) {
-  for (const branch of branches) {
-    // @TODO: Support nested arrays for parallel execution
-    const action = actions[branch.actionIndex]
-    const result = await action(ctx, input)
-    Object.assign(input, result)
-
-    for (const path in branch.outputs) {
-      if (path in result) {
-        const outputBranches = branch.outputs[path]
-        await executeTree(outputBranches, actions, ctx, input)
-      }
-    }
-  }
-
-  return ctx
-}
-
-export default {
-  action
 }
