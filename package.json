@@ -21,6 +21,7 @@
   "homepage": "https://github.com/maxfrigge/arnie#readme",
   "dependencies": {
     "check-types": "7.0.0",
+    "get-value": "2.0.6",
     "path-to-regexp": "1.5.3"
   },
   "devDependencies": {

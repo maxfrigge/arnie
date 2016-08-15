@@ -46,6 +46,10 @@ arnie.addTask('wishlist', [
       get: listWishlists,
       post: createWishlist
     }),
+    when('request.method', {
+      get: listWishlists,
+      post: createWishlist
+    }),
     setCache('no-cache'), // don't use if it's just the header
     setHeader('Cache-Control', 'no-cache'),
     setEtag(),

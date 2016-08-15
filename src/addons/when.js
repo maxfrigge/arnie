@@ -1,18 +1,25 @@
-export default function whenMethod (config) {
-  const paths = {}
+import {PATH_WITHOUT_VALUE} from '../core/symbols'
+import get from 'get-value'
 
-  function parseMethod (ctx) {
+export default (propertyPath, resultPaths) => {
+  function test (ctx, next) {
+    const propertyValue = get(ctx, propertyPath)
+    const pathExists = (path) => resultPaths.hasOwnProperty(path)
+    if (propertyValue === undefined || !pathExists(propertyValue)) {
+      return {
+        otherwise: PATH_WITHOUT_VALUE
+      }
+    }
+
     return {
-      [ctx.method]: true
+      [propertyValue]: PATH_WITHOUT_VALUE
     }
   }
 
-  for (const method in config) {
-    paths[method.toUpperCase()] = config[method]
-  }
+  test.displayName = `when(${propertyPath})`
 
   return [
-    parseMethod,
-    paths
+    test,
+    resultPaths
   ]
 }

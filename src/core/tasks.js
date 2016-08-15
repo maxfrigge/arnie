@@ -1,10 +1,10 @@
+// import {PATH_WITHOUT_VALUE} from './symbols'
 import check from 'check-types'
 
 export function createTask (definition, task = {actions: []}) {
   if (!Array.isArray(definition)) throw new Error('Task definition should be an array.')
 
   const lastAction = () => task.actions[task.actions.length - 1]
-
   definition.forEach((item, index) => {
     if (check.array(item)) {
       createTask(item, task)
@@ -41,13 +41,14 @@ function createOutputs (params) {
   return output
 }
 
-export async function runTask (task, ctx, next) {
+export async function runTask (task, ctx = {}, next = () => {}) {
   if (!ctx.input) {
     ctx.input = {}
   }
   for (const action of task.actions) {
     const output = await action.fn(ctx, next)
     if (output) {
+      // TODO: Ingore keys that match PATH_WITHOUT_VALUE
       Object.assign(ctx.input, output)
 
       for (const path in action.outputs) {

@@ -1,0 +1,1 @@
+export const PATH_WITHOUT_VALUE = Symbol('PATH_WITHOUT_VALUE')
