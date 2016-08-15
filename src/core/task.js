@@ -1,4 +1,4 @@
-// import {PATH_WITHOUT_VALUE} from './symbols'
+import {PATH_WITHOUT_VALUE} from './symbols'
 import check from 'check-types'
 
 export function createTask (definition, task = {actions: []}) {
@@ -48,8 +48,12 @@ export async function runTask (task, ctx = {}, next = () => {}) {
   for (const action of task.actions) {
     const output = await action.fn(ctx, next)
     if (output) {
-      // TODO: Ingore keys that match PATH_WITHOUT_VALUE
-      Object.assign(ctx.input, output)
+      for (const key in output) {
+        const value = output[key]
+        if (value !== PATH_WITHOUT_VALUE) {
+          ctx.input[key] = value
+        }
+      }
 
       for (const path in action.outputs) {
         if (path in output) {
