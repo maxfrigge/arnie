@@ -4,7 +4,9 @@ import {
   runTask
 } from '../../src/core/tasks'
 
-test('Create task from flat task definition.', (t) => {
+test('Given a simple task definition, createTask()', (t) => {
+  t.plan(1)
+
   const actionA = () => {}
   const actionB = () => {}
   const actionC = () => {}
@@ -32,12 +34,11 @@ test('Create task from flat task definition.', (t) => {
   t.deepEqual(
     actual,
     expected,
-    'Given a flat task definition, createTask() should create a valid task.'
+    'should create a valid task'
   )
-  t.end()
 })
 
-test('Create flat task from nested arrays in task definition.', (t) => {
+test('Given a task definition with nested arrays, createTask()', (t) => {
   const actionA = () => {}
   const actionB = () => {}
   const actionC = () => {}
@@ -69,12 +70,12 @@ test('Create flat task from nested arrays in task definition.', (t) => {
   t.deepEqual(
     actual,
     expected,
-    'Given a flat task definition, createTask() should create a valid task.'
+    'should create a valid task'
   )
   t.end()
 })
 
-test('Create a simple task with outputs.', (t) => {
+test('Given a task definition with outputs, createTask()', (t) => {
   const actionA = () => {}
   const actionB = () => {}
   const actionC = () => {}
@@ -129,12 +130,12 @@ test('Create a simple task with outputs.', (t) => {
   t.deepEqual(
     actual,
     expected,
-    'Given a task definition with outputs, createTask() should create a valid task.'
+    'should create a valid task'
   )
   t.end()
 })
 
-test('Create a complex task from nested definitions.', (t) => {
+test('Given a complex task definition, createTask()', (t) => {
   const actionA = () => {}
   const actionB = () => {}
   const actionC = () => {}
@@ -226,78 +227,52 @@ test('Create a complex task from nested definitions.', (t) => {
   t.deepEqual(
     actual,
     expected,
-    'Given a deeply nested task definition, createTask() should create a valid task.'
+    'should create a valid task'
   )
   t.end()
 })
 
-test('Run a simple task and pass input along.', (t) => {
-  t.plan(3)
-  const actionA = (ctx) => {
-    t.equal(
-      ctx.input.initialInput,
-      'foo'
-    )
+test('Given a complex task, runTask()', (t) => {
+  t.plan(9)
 
-    return {
-      moreInput: 'bar'
+  let actionNum = 0
+  const shouldNotRun = () => t.fail('should NOT run this action')
+  const shouldRun = (order, output) => {
+    return (ctx) => {
+      t.equal(
+        actionNum += 1,
+        order,
+        `should run each action in sequential order (${order})`
+      )
+      return output
     }
   }
-  const actionB = (ctx) => {
-    t.equal(
-      ctx.input.moreInput,
-      'bar'
-    )
+  const shouldRunWithInput = (order, expectedInput, output) => {
+    return (ctx) => {
+      t.equal(
+        actionNum += 1,
+        order,
+        `should run each action in sequential order (${order})`
+      )
+      t.deepEqual(
+        ctx.input,
+        expectedInput,
+        'should receive merged input'
+      )
+
+      return output
+    }
   }
 
   const task = createTask([
-    actionA,
-    actionB
-  ])
-
-  runTask(task, {input: {initialInput: 'foo'}})
-  .then((ctx) => {
-    t.deepEqual(
-      ctx.input,
-      {initialInput: 'foo', moreInput: 'bar'}
-    )
-  })
-})
-
-test('Run a complex task with paths and nesting.', (t) => {
-  t.plan(6)
-  const actionA = (ctx) => {
-    t.pass('run action')
-    return {takeThisPath: true}
-  }
-  const actionB = (ctx) => {
-    t.deepEqual(
-      ctx.input,
-      {initialInput: 'foo', takeThisPath: true, nestedOutput: true}
-    )
-
-    return {
-      initialInput: 'changedFoo'
-    }
-  }
-  const shouldRun = async (ctx) => {
-    t.pass('run async action')
-
-    return {nestedOutput: true}
-  }
-  const shouldNotRun = (ctx) => {
-    t.fail('should not run this action')
-  }
-
-  const task = createTask([
-    actionA, {
-      takeThisPath: [
-        shouldRun, {
+    shouldRunWithInput(1, {initialInput: 'foo'}, {newData: 123}), {
+      newData: [
+        shouldRun(2), {
           testA: [shouldNotRun]
         },
-        actionA, {
-          takeThisPath: [
-            shouldRun
+        shouldRun(3, {someOutput: '123'}), {
+          someOutput: [
+            shouldRunWithInput(4, {initialInput: 'foo', newData: 123, someOutput: '123'}, {initialInput: 'changedFoo'})
           ],
           dontTakeThisPath: [
             shouldNotRun
@@ -308,14 +283,9 @@ test('Run a complex task with paths and nesting.', (t) => {
         shouldNotRun
       ]
     },
-    actionB
+    shouldRunWithInput(5, {initialInput: 'changedFoo', newData: 123, someOutput: '123'})
   ])
 
   runTask(task, {input: {initialInput: 'foo'}})
-  .then((ctx) => {
-    t.deepEqual(
-      ctx.input,
-      {initialInput: 'changedFoo', takeThisPath: true, nestedOutput: true}
-    )
-  })
+  .then((ctx) => t.pass('should complete'))
 })

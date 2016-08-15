@@ -19,16 +19,20 @@ function teardown (fixtures) {
   fixtures.server.close()
 }
 
-test('Run all tasks as Koa middleware', (t) => {
+test('Given multiple tasks, middleware()', (t) => {
   const fixtures = setup()
 
   t.plan(5)
 
   let actionNum = 0
-  const shouldNotRun = () => t.fail('should never run this action')
-  const shouldRun = (index) => {
+  const shouldNotRun = () => t.fail('should NOT run this action')
+  const shouldRun = (order) => {
     return () => {
-      t.equal(actionNum += 1, index)
+      t.equal(
+        actionNum += 1,
+        order,
+        `should run each action as middleware in sequential order (${order})`
+      )
       return {someOutput: true}
     }
   }
@@ -58,7 +62,7 @@ test('Run all tasks as Koa middleware', (t) => {
   )
 
   fixtures.request.get('/').end(() => {
-    t.pass('requst complete')
+    t.pass('should complete each task')
     teardown(fixtures)
   })
 })

@@ -1,6 +1,8 @@
 # KOA Arnie
 
-**A real action hero for Koa2 - inspired by [CerebralJS](http://www.cerebraljs.com/)**
+**A real action hero backends - inspired by [CerebralJS](http://www.cerebraljs.com/)**
+
+It's currently compatible with Koa2 only!
 
 Arnie sits restless and wants action! Actions are structured in chains and you compose them like legos to make things happen. Here is what an action chain looks like.
 

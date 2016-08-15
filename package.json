@@ -1,22 +1,24 @@
 {
-  "name": "koa-arnie",
+  "name": "arnie",
   "version": "0.1.0",
-  "description": "A real action hero for Koa2",
+  "description": "Action hero for backends",
   "main": "src/index.js",
   "scripts": {
-    "test": "babel-tape-runner 'test/**/*.js'",
-    "start": "nodemon demo/src/main.js --exec babel-node"
+    "test": "tape -r babel-register 'test/**/*.js'",
+    "test:watch": "watch 'npm test' -d",
+    "start": "nodemon demo/src/main.js --exec babel-node",
+    "lint": "standard"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/maxfrigge/koa-arnie.git"
+    "url": "git+https://github.com/maxfrigge/arnie.git"
   },
   "author": "Max Frigge <max.frigge@gmail.com>",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/maxfrigge/koa-arnie/issues"
+    "url": "https://github.com/maxfrigge/arnie/issues"
   },
-  "homepage": "https://github.com/maxfrigge/koa-arnie#readme",
+  "homepage": "https://github.com/maxfrigge/arnie#readme",
   "dependencies": {
     "check-types": "7.0.0",
     "path-to-regexp": "1.5.3"
@@ -26,11 +28,13 @@
     "babel-eslint": "6.1.2",
     "babel-preset-es2015-node6": "0.3.0",
     "babel-preset-stage-3": "6.11.0",
+    "babel-register": "6.11.6",
     "faucet": "0.0.1",
     "koa": "2.0.0-alpha.3",
     "standard": "7.1.2",
     "supertest": "2.0.0",
-    "tape": "4.6.0"
+    "tape": "4.6.0",
+    "watch": "0.19.1"
   },
   "standard": {
     "parser": "babel-eslint"
