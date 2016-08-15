@@ -1,29 +1,15 @@
 import test from 'tape'
-import supertest from 'supertest'
-import Koa from 'koa'
+import {
+  setupKoa,
+  teardownKoa
+} from '../utils/koa'
 import middleware from '../../src/core/middleware'
 import header from '../../src/addons/header'
-
-function setup () {
-  const app = new Koa()
-  const server = app.listen()
-  const request = supertest.agent(server)
-
-  return {
-    app,
-    request,
-    server
-  }
-}
-
-function teardown (fixtures) {
-  fixtures.server.close()
-}
 
 test('Addon: header()', (t) => {
   t.plan(3)
 
-  const fixtures = setup()
+  const koa = setupKoa()
   const task = [
     header('Cache-Control', 'no-cache'),
     header({
@@ -31,13 +17,13 @@ test('Addon: header()', (t) => {
       'Bar': 'foo'
     })
   ]
-  fixtures.app.use(
+  koa.app.use(
     middleware({
       task
     })
   )
 
-  fixtures.request.get('/').end((err, res) => {
+  koa.request.get('/').end((err, res) => {
     if (!err) {
       t.equal(
         res.header['cache-control'],
@@ -55,6 +41,6 @@ test('Addon: header()', (t) => {
         'should set reponse header'
       )
     }
-    teardown(fixtures)
+    teardownKoa(koa)
   })
 })

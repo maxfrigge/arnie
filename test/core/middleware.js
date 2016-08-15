@@ -1,29 +1,14 @@
 import test from 'tape'
-import supertest from 'supertest'
-import Koa from 'koa'
+import {
+  setupKoa,
+  teardownKoa
+} from '../utils/koa'
 import middleware from '../../src/core/middleware'
 
-function setup () {
-  const app = new Koa()
-  const server = app.listen()
-  const request = supertest.agent(server)
-
-  return {
-    app,
-    request,
-    server
-  }
-}
-
-function teardown (fixtures) {
-  fixtures.server.close()
-}
-
 test('Given multiple tasks, middleware()', (t) => {
-  const fixtures = setup()
-
   t.plan(5)
 
+  const koa = setupKoa()
   let actionNum = 0
   const shouldNotRun = () => t.fail('should NOT run this action')
   const shouldRun = (order) => {
@@ -54,15 +39,15 @@ test('Given multiple tasks, middleware()', (t) => {
     }
   ]
 
-  fixtures.app.use(
+  koa.app.use(
     middleware({
       taskA,
       taskB
     })
   )
 
-  fixtures.request.get('/').end(() => {
+  koa.request.get('/').end(() => {
     t.pass('should complete each task')
-    teardown(fixtures)
+    teardownKoa(koa)
   })
 })

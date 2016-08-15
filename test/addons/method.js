@@ -1,24 +1,10 @@
 import test from 'tape'
-import supertest from 'supertest'
-import Koa from 'koa'
+import {
+  setupKoa,
+  teardownKoa
+} from '../utils/koa'
 import middleware from '../../src/core/middleware'
 import method from '../../src/addons/method'
-
-function setup () {
-  const app = new Koa()
-  const server = app.listen()
-  const request = supertest.agent(server)
-
-  return {
-    app,
-    request,
-    server
-  }
-}
-
-function teardown (fixtures) {
-  fixtures.server.close()
-}
 
 test('Addon: method()', (t) => {
   t.plan(5)
@@ -34,7 +20,7 @@ test('Addon: method()', (t) => {
     }
   }
 
-  const fixtures = setup()
+  const koa = setupKoa()
   const task = [
     method({
       get: [testRequestMethod('get')],
@@ -44,23 +30,23 @@ test('Addon: method()', (t) => {
       options: [testRequestMethod('options')]
     })
   ]
-  fixtures.app.use(
+  koa.app.use(
     middleware({
       task
     })
   )
 
-  fixtures.request.get('/').end(teardownWhenComplete)
-  fixtures.request.post('/').end(teardownWhenComplete)
-  fixtures.request.put('/').end(teardownWhenComplete)
-  fixtures.request.delete('/').end(teardownWhenComplete)
-  fixtures.request.options('/').end(teardownWhenComplete)
+  koa.request.get('/').end(teardownWhenComplete)
+  koa.request.post('/').end(teardownWhenComplete)
+  koa.request.put('/').end(teardownWhenComplete)
+  koa.request.delete('/').end(teardownWhenComplete)
+  koa.request.options('/').end(teardownWhenComplete)
 
   let requestCount = 0
   function teardownWhenComplete () {
     requestCount += 1
     if (requestCount === 5) {
-      teardown(fixtures)
+      teardownKoa(koa)
     }
   }
 })
