@@ -31,7 +31,6 @@ export default function (path, task) {
         '_route_did_match': PATH_WITHOUT_VALUE
       }, ctx.query, params)
 
-      console.log('action', output)
       return output
     }
   }
