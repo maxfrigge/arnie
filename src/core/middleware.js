@@ -1,7 +1,7 @@
 import {
   createTask,
   runTask
-} from './tasks'
+} from './task'
 
 export default function middleware (taskDefinitions) {
   const tasks = Object

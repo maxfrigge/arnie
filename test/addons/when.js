@@ -2,7 +2,7 @@ import test from 'tape'
 import {
   createTask,
   runTask
-} from '../../src/core/tasks'
+} from '../../src/core/task'
 import when from '../../src/addons/when'
 
 test('Addon: when()', (t) => {

@@ -2,7 +2,7 @@ import test from 'tape'
 import {
   createTask,
   runTask
-} from '../../src/core/tasks'
+} from '../../src/core/task'
 
 test('Given a simple task definition, createTask()', (t) => {
   t.plan(1)
