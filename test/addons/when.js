@@ -6,7 +6,7 @@ import {
 import when from '../../src/addons/when'
 
 test('Addon: when()', (t) => {
-  t.plan(4)
+  t.plan(5)
 
   const task = createTask([
     when('path.to.propertyA', {
@@ -22,8 +22,11 @@ test('Addon: when()', (t) => {
     }),
     when('path.does.not.exist', {
       otherwise: [() => t.pass('should route to otherwise when property does not exist')]
-    })
+    }),
+    when('path.to.propertyC', [
+      () => t.pass('should run task when property truthy')
+    ])
   ])
 
-  runTask(task, {path: {to: {propertyA: 'value', propertyB: 'foo'}}})
+  runTask(task, {path: {to: {propertyA: 'value', propertyB: 'foo', propertyC: true}}})
 })

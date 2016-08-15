@@ -2,21 +2,23 @@ import {PATH_WITHOUT_VALUE} from '../core/symbols'
 import get from 'get-value'
 
 export default (propertyPath, resultPaths) => {
+  const resultIsTask = Array.isArray(resultPaths)
   function test (ctx, next) {
     const propertyValue = getPropertyValue(propertyPath, ctx)
-    const pathExists = (path) => resultPaths.hasOwnProperty(path)
-    if (propertyValue === undefined || !pathExists(propertyValue)) {
-      return {
-        otherwise: PATH_WITHOUT_VALUE
-      }
-    }
-
-    return {
-      [propertyValue]: PATH_WITHOUT_VALUE
+    if (!resultIsTask) {
+      return createValuePaths(propertyValue, resultPaths)
+    } else {
+      return createTruthyPath(propertyValue)
     }
   }
 
   test.displayName = `when(${propertyPath})`
+
+  if (resultIsTask) {
+    resultPaths = {
+      truthy: resultPaths
+    }
+  }
 
   return [
     test,
@@ -30,4 +32,25 @@ function getPropertyValue (propertyPath, ctx) {
   }
 
   return get(ctx, propertyPath)
+}
+
+function createValuePaths (propertyValue, resultPaths) {
+  const pathExists = (path) => resultPaths.hasOwnProperty(path)
+  if (propertyValue === undefined || !pathExists(propertyValue)) {
+    return {
+      otherwise: PATH_WITHOUT_VALUE
+    }
+  }
+
+  return {
+    [propertyValue]: PATH_WITHOUT_VALUE
+  }
+}
+
+function createTruthyPath (propertyValue) {
+  if (propertyValue) {
+    return {
+      truthy: PATH_WITHOUT_VALUE
+    }
+  }
 }

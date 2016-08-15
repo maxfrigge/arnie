@@ -31,6 +31,10 @@ export default function (path, task) {
         '_route_did_match': PATH_WITHOUT_VALUE
       }, ctx.query, params)
 
+      if (expectedKeys.length) {
+        output.routeKeys = expectedKeys
+      }
+
       return output
     }
   }
