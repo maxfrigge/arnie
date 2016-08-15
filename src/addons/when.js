@@ -3,9 +3,9 @@ import get from 'get-value'
 
 export default (propertyPath, resultPaths) => {
   function test (ctx, next) {
-    const propertyValue = get(ctx, propertyPath)
+    const propertyValue = getPropertyValue(propertyPath, ctx)
     const pathExists = (path) => resultPaths.hasOwnProperty(path)
-    if (propertyValue === undefined || !pathExists(propertyValue)) {
+    if (propertyValue === undefined || !pathExists(propertyValue)) {
       return {
         otherwise: PATH_WITHOUT_VALUE
       }
@@ -22,4 +22,12 @@ export default (propertyPath, resultPaths) => {
     test,
     resultPaths
   ]
+}
+
+function getPropertyValue (propertyPath, ctx) {
+  if (typeof propertyPath === 'function') {
+    return propertyPath(ctx)
+  }
+
+  return get(ctx, propertyPath)
 }
