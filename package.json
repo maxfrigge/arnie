@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "test": "tape -r babel-register 'test/**/*.js'",
-    "test:watch": "watch 'npm test' -d",
+    "test:watch": "watch 'npm test' --ignoreDirectoryPattern='/node_modules/i' --ignoreDotFiles",
     "start": "nodemon demo/src/main.js --exec babel-node",
     "lint": "standard"
   },
@@ -29,7 +29,6 @@
     "babel-preset-es2015-node6": "0.3.0",
     "babel-preset-stage-3": "6.11.0",
     "babel-register": "6.11.6",
-    "faucet": "0.0.1",
     "koa": "2.0.0-alpha.3",
     "standard": "7.1.2",
     "supertest": "2.0.0",
