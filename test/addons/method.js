@@ -27,8 +27,8 @@ test('Addon: method()', (t) => {
     return (ctx) => {
       const actualMethod = ctx.request.method.toLowerCase()
       t.equal(
-        expectedMethod,
         actualMethod,
+        expectedMethod,
         `should execute ${expectedMethod} task on ${expectedMethod} request`
       )
     }
