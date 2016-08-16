@@ -1,4 +1,5 @@
 import pathToRegexp from 'path-to-regexp'
+import get from 'get-value'
 import {PATH_WITHOUT_VALUE} from '../core/symbols'
 import when from './when'
 
