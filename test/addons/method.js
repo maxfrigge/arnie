@@ -9,13 +9,13 @@ import method from '../../src/addons/method'
 test('Addon: method()', (t) => {
   t.plan(5)
 
-  const testRequestMethod = (expectedMethod) => {
+  const testRequestMethod = (expectedMethod, path = expectedMethod) => {
     return (ctx) => {
       const actualMethod = ctx.request.method.toLowerCase()
       t.equal(
         actualMethod,
         expectedMethod,
-        `should execute ${expectedMethod} task on ${expectedMethod} request`
+        `should execute ${path} task on ${expectedMethod} request`
       )
     }
   }
@@ -26,8 +26,8 @@ test('Addon: method()', (t) => {
       get: [testRequestMethod('get')],
       post: [testRequestMethod('post')],
       put: [testRequestMethod('put')],
-      delete: [testRequestMethod('delete')],
-      options: [testRequestMethod('options')]
+      options: [testRequestMethod('options')],
+      otherwise: [testRequestMethod('delete', 'otherwise')]
     })
   ]
   koa.app.use(
