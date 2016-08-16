@@ -1,4 +1,5 @@
 import when from './when'
+import fail from './fail'
 
 const pathTests = {
   list: (ctx) => isMethod(ctx, 'GET') && !hasId(ctx),
@@ -10,6 +11,9 @@ const pathTests = {
 }
 
 export default (routes) => {
+  if (!routes.hasOwnProperty('otherwise')) {
+    routes.otherwise = [fail(405)]
+  }
   return when(getRoute, routes)
 }
 

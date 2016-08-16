@@ -8,7 +8,7 @@ import route from '../../src/addons/route'
 import restEndpoint from '../../src/addons/restEndpoint'
 
 test('Addon: restEndpoint()', (t) => {
-  t.plan(6)
+  t.plan(7)
 
   const testRequest = (path, expectedMethod, expectedId = undefined) => {
     return (ctx) => {
@@ -36,9 +36,8 @@ test('Addon: restEndpoint()', (t) => {
         show: [testRequest('show', 'get', '123')],
         create: [testRequest('create', 'post')],
         update: [testRequest('update', 'post', '123')],
-        // clear: [testRequest('clear', 'delete')],
-        remove: [testRequest('remove', 'delete', '123')],
-        otherwise: [testRequest('otherwise', 'delete')]
+        clear: [testRequest('clear', 'delete')],
+        remove: [testRequest('remove', 'delete', '123')]
       })
     ])
   ]
@@ -56,11 +55,21 @@ test('Addon: restEndpoint()', (t) => {
   koa.request.post('/resource/123').end(teardownWhenComplete)
   koa.request.delete('/resource').end(teardownWhenComplete)
   koa.request.delete('/resource/123').end(teardownWhenComplete)
+  koa.request.put('/resource/123').end((err, res) => {
+    if (!err) {
+      t.equal(
+        res.status,
+        405,
+        'should send 405 status if method is not supported'
+      )
+    }
+    teardownWhenComplete()
+  })
 
   let requestCount = 0
   function teardownWhenComplete () {
     requestCount += 1
-    if (requestCount === 6) {
+    if (requestCount === 7) {
       teardownKoa(koa)
     }
   }
