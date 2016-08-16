@@ -4,17 +4,28 @@ import cors from '../lib/addons/cors'
 import route from '../lib/addons/route'
 import restEndoint from '../lib/addons/restEndoint'
 
-// arnie.addTask('wishlist', [
-//   route('/wishlist', [
-//     acceptsOrFail('json', Boom.wrongMethod),
-//     accepts({
-//       json: [],
-//       html: []
-//     }),
-//     fail(Boom.notFound, 'Wishlist not found.', 'params.error'),
-//     fail(Boom.notFound, 'Wishlist not found.', ({params}) => params.error)
-//   ])
-// ])
+arnie.addTask('wishlist', [
+  route('/wishlist', [
+    accepts('json', {
+      otherwise: [
+        fail(Boom.notAcceptable)
+      ]
+    }),
+    method({
+      get: [],
+      post: [],
+      otherwise: [
+        fail(Boom.wrongMethod)
+      ]
+    }),
+    accepts({
+      json: [],
+      html: []
+    }),
+    fail(Boom.notFound, 'Wishlist not found.', 'params.error'),
+    fail(Boom.notFound, 'Wishlist not found.', ({params}) => params.error)
+  ])
+])
 
 // TODO: Add support for when('params.wishlist', false, [])
 // TODO: Test how next works
