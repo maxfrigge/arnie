@@ -36,8 +36,9 @@ test('Addon: restEndpoint()', (t) => {
         show: [testRequest('show', 'get', '123')],
         create: [testRequest('create', 'post')],
         update: [testRequest('update', 'post', '123')],
-        clear: [testRequest('clear', 'delete')],
-        remove: [testRequest('remove', 'delete', '123')]
+        // clear: [testRequest('clear', 'delete')],
+        remove: [testRequest('remove', 'delete', '123')],
+        otherwise: [testRequest('otherwise', 'delete')]
       })
     ])
   ]

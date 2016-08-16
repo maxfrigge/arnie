@@ -76,6 +76,16 @@ const routeWishlistItem = [
   ])
 ]
 
+const router = [
+  route({
+    '/wishlist/:wishlistId?': routeWishlist,
+    '/wishlist/:wishlistId/item/:itemId?': routeWishlistItem,
+    otherwise: [
+      fail(404)
+    ]
+  })
+]
+
 app.use(
   arnie.doIt({
     routeWishlist,

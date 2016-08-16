@@ -1,31 +1,27 @@
 import when from './when'
 
-export default (routes) => {
-  const actions = Object
-  .keys(routes)
-  .map((name) => createRoute(routes, name))
-
-  // @TODO: Test for allowed methods and implement otherwise route?
-  return actions
+const pathTests = {
+  list: (ctx) => isMethod(ctx, 'GET') && !hasId(ctx),
+  show: (ctx) => isMethod(ctx, 'GET') && hasId(ctx),
+  create: (ctx) => isMethod(ctx, 'POST') && !hasId(ctx),
+  update: (ctx) => isMethod(ctx, 'POST') && hasId(ctx),
+  clear: (ctx) => isMethod(ctx, 'DELETE') && !hasId(ctx),
+  remove: (ctx) => isMethod(ctx, 'DELETE') && hasId(ctx)
 }
 
-function createRoute (routes, name) {
-  switch (name) {
-    case 'list':
-      return when((ctx) => isMethod(ctx, 'GET') && !hasId(ctx), routes[name])
-    case 'show':
-      return when((ctx) => isMethod(ctx, 'GET') && hasId(ctx), routes[name])
-    case 'create':
-      return when((ctx) => isMethod(ctx, 'POST') && !hasId(ctx), routes[name])
-    case 'update':
-      return when((ctx) => isMethod(ctx, 'POST') && hasId(ctx), routes[name])
-    case 'clear':
-      return when((ctx) => isMethod(ctx, 'DELETE') && !hasId(ctx), routes[name])
-    case 'remove':
-      return when((ctx) => isMethod(ctx, 'DELETE') && hasId(ctx), routes[name])
-    default:
-      throw new Error(`Unknown route for rest endpoint ${name}`)
+export default (routes) => {
+  return when(getRoute, routes)
+}
+
+function getRoute (ctx) {
+  for (const path in pathTests) {
+    const match = pathTests[path](ctx)
+    if (match) {
+      return path
+    }
   }
+
+  return 'otherwise'
 }
 
 function isMethod (ctx, method) {
