@@ -5,7 +5,7 @@ export default (routes) => {
   .keys(routes)
   .map((name) => createRoute(routes, name))
 
-  // @TODO: We could also add allowed methods?
+  // @TODO: Test for allowed methods and implement otherwise route?
   return actions
 }
 
