@@ -4,6 +4,7 @@ import {PATH_WITHOUT_VALUE} from '../core/symbols'
 export default function (path, task) {
   const expectedKeys = []
   const re = pathToRegexp(path, expectedKeys)
+  const routeKeys = expectedKeys.map(createRouteKey)
 
   const action = (ctx) => {
     const match = re.exec(ctx.path)
@@ -31,8 +32,8 @@ export default function (path, task) {
         '_route_did_match': PATH_WITHOUT_VALUE
       }, ctx.query, params)
 
-      if (expectedKeys.length) {
-        output.routeKeys = expectedKeys
+      if (routeKeys.length) {
+        output.routeKeys = routeKeys
       }
 
       return output
@@ -44,4 +45,11 @@ export default function (path, task) {
       '_route_did_match': task
     }
   ]
+}
+
+function createRouteKey (key) {
+  return {
+    name: key.name,
+    optional: key.optional
+  }
 }

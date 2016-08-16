@@ -3,7 +3,7 @@ import get from 'get-value'
 
 export default (propertyPath, resultPaths) => {
   const resultIsTask = Array.isArray(resultPaths)
-  function test (ctx, next) {
+  function test (ctx) {
     const propertyValue = getPropertyValue(propertyPath, ctx)
     if (!resultIsTask) {
       return createValuePaths(propertyValue, resultPaths)

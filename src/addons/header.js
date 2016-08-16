@@ -6,7 +6,7 @@ export default (...args) => {
     }
   }
 
-  return function method (ctx, next) {
+  return function method (ctx) {
     for (const header in headers) {
       ctx.set(header, headers[header])
     }

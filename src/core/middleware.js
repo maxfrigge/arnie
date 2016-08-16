@@ -12,6 +12,5 @@ export default function middleware (taskDefinitions) {
     for (const task of tasks) {
       await runTask(task, ctx, next)
     }
-    next()
   }
 }

@@ -23,7 +23,7 @@ test('Addon: route()', (t) => {
       )
     }
   }
-  const expectedRouteKeys = [ { delimiter: '/', name: 'param', optional: false, pattern: '[^\\/]+?', prefix: '/', repeat: false } ]
+  const expectedRouteKeys = [ { name: 'param', optional: false } ]
   const koa = setupKoa()
   const task = [
     route('/with/:param/in-path', [
