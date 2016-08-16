@@ -35,6 +35,10 @@ function getPropertyValue (propertyPath, ctx) {
 }
 
 function createValuePaths (propertyValue, resultPaths) {
+  if (typeof propertyValue === 'object') {
+    return propertyValue
+  }
+
   const pathExists = (path) => resultPaths.hasOwnProperty(path)
   if (propertyValue === undefined || !pathExists(propertyValue)) {
     return {
