@@ -27,19 +27,12 @@ arnie.addTask('wishlist', [
   ])
 ])
 
-// TODO: Add support for when('params.wishlist', false, [])
-// TODO: Test how next works
-// TODO: Allow adding regular koa middleware requires signature (ctx, next, params)
-
 const app = new Koa()
 const arnie = Arnie({
   route: {
     prefix: '/v1'
   }
 })
-// TODO: Add support for config params
-// Config get's passed as ctx.arnie.config and is free to use by actions
-// Could also make it singleton/static so that factories can use config too??
 
 // @TODO: Implement sample action
 const loadShopFromHeader = () => false

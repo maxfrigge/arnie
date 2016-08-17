@@ -1,3 +1,5 @@
+// TODO: Add support for when('params.wishlist', false, [])
+
 import {PATH_WITHOUT_VALUE} from '../core/symbols'
 import get from 'get-value'
 

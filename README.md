@@ -1,10 +1,10 @@
 # KOA Arnie
 
-**A real action hero backends - inspired by [CerebralJS](http://www.cerebraljs.com/)**
+**A real action hero for backends - heavily inspired by [CerebralJS](http://www.cerebraljs.com/)**
 
-It's currently compatible with Koa2 only!
+It's meant to be used with Koa2, but the core will work without it.
 
-Arnie sits restless and wants action! Actions are structured in chains and you compose them like legos to make things happen. Here is what an action chain looks like.
+Arnie sits restless and wants action! Actions are structured in tasks and you compose them like legos to make things happen. Here is what a  task looks like.
 
 ```javascript
 const getWishlist [
@@ -31,14 +31,12 @@ src/
 ├── actions/
 │   ├── loadWishlist.js
 │   └── saveWishlist.js
-├── chains/
+├── tasks/
 │   ├── getWishlist.js
 │   └── postWishlist.js
 ├── factories/
 │   ├── cors.js
 │   └── output.js
-├── routes/
-│   └── wishlist.js
 └── main.js
 ```
 
