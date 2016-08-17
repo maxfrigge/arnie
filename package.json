@@ -2,11 +2,12 @@
   "name": "arnie",
   "version": "0.1.0",
   "description": "Action hero for backends",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "tape -r babel-register 'test/**/*.js'",
     "test:watch": "watch 'npm test' --ignoreDirectoryPattern='/node_modules/i' --ignoreDotFiles",
     "start": "nodemon demo/src/main.js --exec babel-node",
+    "build": "babel src -d dist",
     "lint": "standard"
   },
   "repository": {
