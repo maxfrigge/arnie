@@ -1,10 +1,7 @@
 import test from 'tape'
-import {
-  setupKoa,
-  teardownKoa
-} from '../utils/koa'
+import {setupKoa, teardownKoa} from '../utils/koa'
 import middleware from '../../src/core/middleware'
-import status from '../../src/addons/status'
+import {status} from '../../addons'
 
 test('Addon: status()', (t) => {
   t.plan(1)

@@ -1,10 +1,7 @@
 import test from 'tape'
-import {
-  setupKoa,
-  teardownKoa
-} from '../utils/koa'
+import {setupKoa, teardownKoa} from '../utils/koa'
 import middleware from '../../src/core/middleware'
-import method from '../../src/addons/method'
+import {method} from '../../addons'
 
 test('Addon: method()', (t) => {
   t.plan(5)

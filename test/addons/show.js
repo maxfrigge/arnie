@@ -1,11 +1,7 @@
 import test from 'tape'
-import {
-  setupKoa,
-  teardownKoa
-} from '../utils/koa'
+import {setupKoa, teardownKoa} from '../utils/koa'
 import middleware from '../../src/core/middleware'
-import show from '../../src/addons/show'
-import route from '../../src/addons/route'
+import {route, show} from '../../addons'
 
 test('Addon: show()', (t) => {
   t.plan(6)
