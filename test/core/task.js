@@ -8,20 +8,25 @@ test('Given a simple task definition, createTask()', (t) => {
   t.plan(1)
 
   const actionA = () => {}
-  const actionB = () => {}
+  actionA.displayName = 'myName'
+  function actionB () {}
   const actionC = () => {}
 
   const expected = {
+    displayName: undefined,
     actions: [
       {
         fn: actionA,
-        outputs: {}
+        outputs: {},
+        displayName: 'myName'
       }, {
         fn: actionB,
-        outputs: {}
+        outputs: {},
+        displayName: 'actionB'
       }, {
         fn: actionC,
-        outputs: {}
+        outputs: {},
+        displayName: undefined
       }
     ]
   }
@@ -44,16 +49,20 @@ test('Given a task definition with nested arrays, createTask()', (t) => {
   const actionC = () => {}
 
   const expected = {
+    displayName: undefined,
     actions: [
       {
         fn: actionA,
-        outputs: {}
+        outputs: {},
+        displayName: undefined
       }, {
         fn: actionB,
-        outputs: {}
+        outputs: {},
+        displayName: undefined
       }, {
         fn: actionC,
-        outputs: {}
+        outputs: {},
+        displayName: undefined
       }
     ]
   }
@@ -81,34 +90,43 @@ test('Given a task definition with outputs, createTask()', (t) => {
   const actionC = () => {}
 
   const expected = {
+    displayName: undefined,
     actions: [
       {
         fn: actionA,
+        displayName: undefined,
         outputs: {}
       }, {
         fn: actionB,
+        displayName: undefined,
         outputs: {
           actionBOutputA: {
+            displayName: undefined,
             actions: [
               {
                 fn: actionA,
+                displayName: undefined,
                 outputs: {}
               },
               {
                 fn: actionB,
+                displayName: undefined,
                 outputs: {}
               }
             ]
           },
           actionBOutputB: {
+            displayName: undefined,
             actions: [{
               fn: actionC,
+              displayName: undefined,
               outputs: {}
             }]
           }
         }
       }, {
         fn: actionC,
+        displayName: undefined,
         outputs: {}
       }
     ]
@@ -165,42 +183,54 @@ test('Given a complex task definition, createTask()', (t) => {
   ]
 
   const expected = {
+    displayName: undefined,
     actions: [
       {
         fn: actionA,
+        displayName: undefined,
         outputs: {}
       }, {
         fn: actionB,
+        displayName: undefined,
         outputs: {
           actionBOutputA: {
+            displayName: undefined,
             actions: [
               {
                 fn: actionA,
+                displayName: undefined,
                 outputs: {}
               }
             ]
           },
           actionBOutputB: {
+            displayName: undefined,
             actions: [
               {
                 fn: actionB,
+                displayName: undefined,
                 outputs: {
                   subTaskBOutputA: {
+                    displayName: undefined,
                     actions: [
                       {
                         fn: actionA,
+                        displayName: undefined,
                         outputs: {}
                       }
                     ]
                   },
                   subTaskBOutputB: {
+                    displayName: undefined,
                     actions: [
                       {
                         fn: actionB,
+                        displayName: undefined,
                         outputs: {}
                       },
                       {
                         fn: actionC,
+                        displayName: undefined,
                         outputs: {}
                       }
                     ]
@@ -209,6 +239,7 @@ test('Given a complex task definition, createTask()', (t) => {
               },
               {
                 fn: actionC,
+                displayName: undefined,
                 outputs: {}
               }
             ]
@@ -217,6 +248,7 @@ test('Given a complex task definition, createTask()', (t) => {
       },
       {
         fn: actionC,
+        displayName: undefined,
         outputs: {}
       }
     ]

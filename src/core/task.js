@@ -4,6 +4,7 @@ import check from 'check-types'
 export function createTask (definition, task = {actions: []}) {
   if (!Array.isArray(definition)) throw new Error('Task definition should be an array.')
 
+  task.displayName = task.displayName || definition.displayName
   const lastAction = () => task.actions[task.actions.length - 1]
   definition.forEach((item, index) => {
     if (check.array(item)) {
@@ -27,9 +28,15 @@ export function createTask (definition, task = {actions: []}) {
 }
 
 function createAction (fn) {
+  let displayName = fn.displayName
+  if (!displayName && fn.name) {
+    displayName = fn.name
+  }
+
   return {
     fn,
-    outputs: {}
+    outputs: {},
+    displayName
   }
 }
 
@@ -41,12 +48,12 @@ function createOutputs (params) {
   return output
 }
 
-export async function runTask (task, ctx = {}, next = () => {}) {
+export async function runTask (task, ctx = {}, ...args) {
   if (!ctx.input) {
     ctx.input = {}
   }
   for (const action of task.actions) {
-    const output = await action.fn(ctx, next)
+    const output = await action.fn(ctx, ...args)
     if (output) {
       for (const key in output) {
         const value = output[key]
@@ -58,11 +65,23 @@ export async function runTask (task, ctx = {}, next = () => {}) {
       for (const path in action.outputs) {
         if (path in output) {
           const outputTask = action.outputs[path]
-          await runTask(outputTask, ctx, next)
+          await runTask(outputTask, ctx, ...args)
         }
       }
     }
   }
 
   return ctx
+}
+
+export async function runTasks (tasks, ctx = {}, ...args) {
+  const output = {}
+  for (const task of tasks) {
+    Object.assign(
+      output,
+      await runTask(task, ctx, ...args)
+    )
+  }
+
+  return output
 }
