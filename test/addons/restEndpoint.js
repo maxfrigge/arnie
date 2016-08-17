@@ -1,7 +1,8 @@
 import test from 'tape'
 import {setupKoa, teardownKoa} from '../utils/koa'
 import middleware from '../../src/core/middleware'
-import {route, restEndpoint} from '../../addons'
+import route from '../../src/addons/route'
+import restEndpoint from '../../src/addons/restEndpoint'
 
 test('Addon: restEndpoint()', (t) => {
   t.plan(7)

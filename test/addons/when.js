@@ -1,6 +1,6 @@
 import test from 'tape'
 import {createTask, runTask} from '../../src/core/task'
-import {when} from '../../addons'
+import when from '../../src/addons/when'
 
 test('Addon: when()', (t) => {
   t.plan(5)

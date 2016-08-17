@@ -1,7 +1,7 @@
 import test from 'tape'
 import {setupKoa, teardownKoa} from '../utils/koa'
 import middleware from '../../src/core/middleware'
-import {redirect} from '../../addons'
+import redirect from '../../src/addons/redirect'
 
 test('Addon: redirect()', (t) => {
   t.plan(2)

@@ -2,13 +2,15 @@
   "name": "arnie",
   "version": "0.1.2",
   "description": "Action hero for backends",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
+    "lint": "standard 'src/**/*.js' 'test/**/*.js'",
+    "pretest": "npm run lint",
     "test": "tape -r babel-register 'test/**/*.js'",
     "test:watch": "watch 'npm test' --ignoreDirectoryPattern='/node_modules/i' --ignoreDotFiles",
-    "start": "nodemon demo/src/main.js --exec babel-node",
-    "build": "babel src -d dist",
-    "lint": "standard"
+    "prebuild": "npm run lint",
+    "build": "rimraf dist && babel src --out-dir dist",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",

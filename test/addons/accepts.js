@@ -4,7 +4,7 @@ import {
   teardownKoa
 } from '../utils/koa'
 import middleware from '../../src/core/middleware'
-import {accepts} from '../../addons'
+import accepts from '../../src/addons/accepts'
 
 test('Addon: accepts()', (t) => {
   t.plan(3)

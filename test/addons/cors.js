@@ -1,7 +1,7 @@
 import test from 'tape'
 import {setupKoa, teardownKoa} from '../utils/koa'
 import middleware from '../../src/core/middleware'
-import {cors} from '../../addons'
+import cors from '../../src/addons/cors'
 
 test('Addon: cors()', (t) => {
   t.plan(2)

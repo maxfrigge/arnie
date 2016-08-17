@@ -1,7 +1,7 @@
 import test from 'tape'
 import {setupKoa, teardownKoa} from '../utils/koa'
 import middleware from '../../src/core/middleware'
-import {header} from '../../addons'
+import header from '../../src/addons/header'
 
 test('Addon: header()', (t) => {
   t.plan(3)
