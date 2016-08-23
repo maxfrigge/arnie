@@ -53,20 +53,28 @@ export async function runTask (task, ctx = {}, ...args) {
     ctx.input = {}
   }
   for (const action of task.actions) {
-    const output = await action.fn(ctx, ...args)
-    if (output) {
-      for (const key in output) {
-        const value = output[key]
-        if (value !== PATH_WITHOUT_VALUE) {
-          ctx.input[key] = value
+    try {
+      const output = await action.fn(ctx, ...args)
+      if (output) {
+        for (const key in output) {
+          const value = output[key]
+          if (value !== PATH_WITHOUT_VALUE) {
+            ctx.input[key] = value
+          }
+        }
+
+        for (const path in action.outputs) {
+          if (path in output) {
+            const outputTask = action.outputs[path]
+            await runTask(outputTask, ctx, ...args)
+          }
         }
       }
-
-      for (const path in action.outputs) {
-        if (path in output) {
-          const outputTask = action.outputs[path]
-          await runTask(outputTask, ctx, ...args)
-        }
+    } catch (error) {
+      if (action.outputs.error) {
+        await runTask(action.outputs.error, ctx, ...args)
+      } else {
+        throw error
       }
     }
   }

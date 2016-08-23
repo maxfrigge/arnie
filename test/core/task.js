@@ -265,7 +265,7 @@ test('Given a complex task definition, createTask()', (t) => {
 })
 
 test('Given a complex task, runTask()', (t) => {
-  t.plan(9)
+  t.plan(10)
 
   let actionNum = 0
   const shouldNotRun = () => t.fail('should NOT run this action')
@@ -315,7 +315,16 @@ test('Given a complex task, runTask()', (t) => {
         shouldNotRun
       ]
     },
-    shouldRunWithInput(5, {initialInput: 'changedFoo', newData: 123, someOutput: '123'})
+    shouldRunWithInput(5, {initialInput: 'changedFoo', newData: 123, someOutput: '123'}),
+    (context) => {
+      throw new Error('Something bad happened')
+    }, {
+      error: [
+        (context) => {
+          t.pass('should trigger error path Error is thrown')
+        }
+      ]
+    }
   ])
 
   runTask(task, {input: {initialInput: 'foo'}})
