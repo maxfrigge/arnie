@@ -2,6 +2,8 @@
 
 **A real action hero for backends - heavily inspired by [CerebralJS](http://www.cerebraljs.com/)**
 
+[![NPM version][npm-image]][npm-url]
+
 Arnie wants action! Actions are structured in tasks and you compose them like legos to make things happen. Arnie is meant to be used with Koa2, but the core will work without it. The API is currently likely to change, so be adventures when using Arnie :)
 
 Here is what a task looks like.
@@ -345,3 +347,6 @@ export default [
   })
 ]
 ```
+
+[npm-image]: https://img.shields.io/npm/v/arnie.svg?style=flat
+[npm-url]: https://npmjs.org/package/arnie
