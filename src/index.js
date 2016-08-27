@@ -1,6 +1,12 @@
 import middleware from './core/middleware'
 import {createTask, runTask, runTasks} from './core/task'
 
+export {
+  createTask,
+  runTask,
+  runTasks
+}
+
 export default function Arnie (config = {}) {
   const myTasks = []
 
