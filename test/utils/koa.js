@@ -1,7 +1,7 @@
-import Koa from 'koa'
-import supertest from 'supertest'
+const Koa = require('koa')
+const supertest = require('supertest')
 
-export function setupKoa () {
+module.exports.setupKoa = () => {
   const app = new Koa()
   const server = app.listen()
   const request = supertest.agent(server)
@@ -13,6 +13,6 @@ export function setupKoa () {
   }
 }
 
-export function teardownKoa (koa) {
+module.exports.teardownKoa = (koa) => {
   koa.server.close()
 }

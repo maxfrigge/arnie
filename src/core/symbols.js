@@ -1,1 +1,0 @@
-export const PATH_WITHOUT_VALUE = 'PATH_WITHOUT_VALUE'
