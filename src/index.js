@@ -1,4 +1,4 @@
-const FunctionTree = require('function-tree').default
+const FunctionTree = require('./function-tree').default
 
 module.exports = (props) => {
   const runTask = FunctionTree()
