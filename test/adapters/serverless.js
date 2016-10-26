@@ -18,12 +18,22 @@ test('Arnie (serverless)', (t) => {
     )
   }
 
+  const expectedReq = {
+    method: 'GET',
+    url: '/success',
+    headers: {}
+  }
   const taskA = [
-    (ctx) => {
+    ({input, path}) => {
+      t.deepEqual(
+        input.req,
+        expectedReq,
+        'should pass request information'
+      )
       testExecution('taskA', 1)
       return new Promise((resolve) => {
         setTimeout(
-          () => resolve(ctx.path.goHere({someOutput: true})),
+          () => resolve(path.goHere({someOutput: true})),
           50
         )
       })
@@ -51,7 +61,7 @@ test('Arnie (serverless)', (t) => {
     '/error': arnie(taskB)
   })
 
-  serverless.request('/error', (error, result) => {
+  serverless.request({method: 'GET', path: '/error'}, (error, result) => {
     t.equal(
       error,
       expectedError,
@@ -59,12 +69,12 @@ test('Arnie (serverless)', (t) => {
     )
   })
 
-  const expectedResult = {path: '/success', someOutput: true}
-  serverless.request('/success', (error, result) => {
+  const expectedResult = {someOutput: true}
+  serverless.request({method: 'GET', path: '/success'}, (error, result) => {
     if (!error) {
-      t.deepEqual(
-        result,
-        expectedResult,
+      t.eqaul(
+        result.input.someOutput,
+        expectedResult.someOutput,
         'should resolve successful execution with final output'
       )
     }

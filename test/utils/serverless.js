@@ -1,12 +1,12 @@
 module.exports.setupServerless = (functions) => {
   return {
-    request: (path, callback) => {
-      const fn = functions[path]
+    request: (options, callback) => {
+      const fn = functions[options.path]
       if (typeof fn !== 'function') {
-        throw new Error(`No function for path ${path} defined!`)
+        throw new Error(`No function for path ${options.path} defined!`)
       }
       fn(
-        createEvent(path),
+        createEvent(options),
         createContext(),
         callback
       )
@@ -14,9 +14,11 @@ module.exports.setupServerless = (functions) => {
   }
 }
 
-function createEvent (path) {
+function createEvent (options) {
   return {
-    path
+    method: options.method,
+    path: options.path,
+    headers: {}
   }
 }
 
