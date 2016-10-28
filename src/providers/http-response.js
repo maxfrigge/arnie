@@ -22,6 +22,9 @@ function HttpResponse (payload) {
       headers: {}
     }
   }
+  if (!payload.reponse_meta) {
+    payload.reponse_meta = {}
+  }
   const response = {
     get header () {
       return response.headers
@@ -35,7 +38,7 @@ function HttpResponse (payload) {
     set status (code) {
       assert(typeof code === 'number', 'status code must be a number')
       assert(statuses[code], `invalid status code: ${code}`)
-      payload.response._explicitStatus = true
+      payload.reponse_meta._explicitStatus = true
       payload.response.statusCode = code
       payload.response.statusMessage = statuses[code]
       if (response.body && statuses.empty[code]) response.body = null
@@ -62,11 +65,11 @@ function HttpResponse (payload) {
         return
       }
 
-      if (!payload.response._explicitStatus) {
+      if (!payload.reponse_meta._explicitStatus) {
         response.status = 200
       }
 
-      const setType = !response.header['content-type']
+      const setType = !response.headers['content-type']
 
       // string
       if (typeof val === 'string') {
@@ -106,7 +109,7 @@ function HttpResponse (payload) {
       response.set('content-length', n)
     },
     get length () {
-      const len = response.header['content-length']
+      const len = response.headers['content-length']
       const body = response.body
 
       if (len === null) {
@@ -207,7 +210,7 @@ function HttpResponse (payload) {
       return typeis(type, types)
     },
     get (field) {
-      return response.header[field.toLowerCase()] || ''
+      return response.headers[field.toLowerCase()] || ''
     },
     set (field, val) {
       if (arguments.length === 2) {
@@ -216,7 +219,7 @@ function HttpResponse (payload) {
         } else {
           val = String(val)
         }
-        payload.response.header[field.toLowerCase()] = val
+        payload.response.headers[field.toLowerCase()] = val
       } else {
         for (const key in field) {
           response.set(key, field[key])
@@ -224,7 +227,7 @@ function HttpResponse (payload) {
       }
     },
     remove (field) {
-      delete payload.response.header[field.toLowerCase()]
+      delete payload.response.headers[field.toLowerCase()]
     }
   }
 

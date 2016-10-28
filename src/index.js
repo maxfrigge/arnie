@@ -15,7 +15,7 @@ module.exports = (options = {}) => {
       }
       runTask.once('end', onEnd)
       runTask.once('error', onError)
-      runTask(task, payload)
+      runTask(task, payload || {})
     })
   }
 }

@@ -2,25 +2,28 @@ const net = require('net')
 const contentType = require('content-type')
 const typeis = require('type-is')
 const fresh = require('fresh')
+const accepts = require('accepts')
 
-module.exports = (options) => {
+module.exports = (options = {}) => {
   return (context, functionDetails, payload) => {
     if (payload.serverless) {
       context.request = ServerlessRequest(payload, context.response)
     } else {
-      console.warn('The ServerlessRequestProvider can only be used with the serverless adapter.')
+      console.warn('The ServerlessRequestProvider should be used with the serverless adapter.')
     }
     return context
   }
 }
 
 function ServerlessRequest (payload, response) {
+  const headers = getHeaders(payload)
+  const accept = accepts({headers})
   const request = {
     get header () {
-      return payload.serverless.aws.event.headers
+      return headers
     },
     get headers () {
-      return payload.serverless.aws.event.headers
+      return headers
     },
     get url () {
       return `${request.origin}${request.path}`
@@ -102,16 +105,16 @@ function ServerlessRequest (payload, response) {
         .reverse()
     },
     accepts () {
-      return request.accept.types.apply(request.accept, arguments)
+      return accept.types.apply(accept, arguments)
     },
     acceptsEncodings () {
-      return request.accept.encodings.apply(request.accept, arguments)
+      return accept.encodings.apply(accept, arguments)
     },
     acceptsCharsets () {
-      return request.accept.charsets.apply(request.accept, arguments)
+      return accept.charsets.apply(accept, arguments)
     },
     acceptsLanguages () {
-      return request.accept.languages.apply(request.accept, arguments)
+      return accept.languages.apply(accept, arguments)
     },
     is (types) {
       if (!types) {
@@ -140,4 +143,16 @@ function ServerlessRequest (payload, response) {
   }
 
   return request
+}
+
+function getHeaders (payload) {
+  const obj = payload.serverless.aws.event.headers
+  const keys = Object.keys(obj)
+  const header = {}
+  let n = keys.length
+  while (n--) {
+    const key = keys[n]
+    header[key.toLowerCase()] = obj[key]
+  }
+  return header
 }

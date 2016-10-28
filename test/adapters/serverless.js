@@ -4,7 +4,7 @@ const A = require('../../src/adapters/serverless')
 const arnie = A()
 
 test('Arnie (serverless)', (t) => {
-  t.plan(8)
+  t.plan(9)
 
   const actionNum = {
     taskA: 0,
@@ -25,14 +25,9 @@ test('Arnie (serverless)', (t) => {
         () => t.fail('should NOT run this action')
       ],
       goHere: [
-        (ctx) => {
+        ({response}) => {
           testExecutionOrder('taskA', 2)
-          return {
-            response: {
-              body: 'OK',
-              statusCode: 200
-            }
-          }
+          response.body = 'text'
         }
       ]
     },
@@ -61,8 +56,9 @@ test('Arnie (serverless)', (t) => {
   serverless.request.get('/success').end((error, result) => {
     if (!error) {
       t.equal(actionNum.taskA, 3, 'should complete taskA before request ends')
-      t.equal(result.text, 'OK', 'should send the body')
+      t.equal(result.text, 'text', 'should send the body')
       t.equal(result.statusCode, 200, 'should send the status code')
+      t.equal(result.headers['content-type'], 'text/plain; charset=utf-8', 'should send the content type')
     }
   })
 })
