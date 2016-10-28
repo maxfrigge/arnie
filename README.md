@@ -1,3 +1,5 @@
+# ATTENTION PLEASE: I have just changed everything and refactored from the ground up (WIP) - DO NOT USE!
+
 # KOA Arnie
 
 **A real action hero for backends - heavily inspired by [CerebralJS](http://www.cerebraljs.com/)**
