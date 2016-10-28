@@ -1,24 +1,40 @@
+const supertest = require('supertest')
+const url = require('url')
+
 module.exports.setupServerless = (functions) => {
-  return {
-    request: (options, callback) => {
-      const fn = functions[options.path]
-      if (typeof fn !== 'function') {
-        throw new Error(`No function for path ${options.path} defined!`)
-      }
-      fn(
-        createEvent(options),
-        createContext(),
-        callback
-      )
+  // console.log('Setup serverless')
+  const request = supertest.agent((req, res) => {
+    // console.log('SLS: request', req, res)
+    const awsEvent = createEvent(req)
+    const awsContext = createContext()
+    const fn = functions[awsEvent.path]
+    // console.log('SLS: parsed', awsEvent, awsContext, fn)
+    if (typeof fn !== 'function') {
+      throw new Error(`No function for path ${awsEvent.path} defined!`)
     }
+    fn(awsEvent, awsContext, (error, response) => {
+      //  console.log('SLS: callback', error, response)
+      if (error) {
+        res.writeHead(500)
+        res.end(error.message)
+        return
+      }
+
+      res.writeHead(response.statusCode, response.headers)
+      res.end(response.body)
+    })
+  })
+
+  return {
+    request
   }
 }
 
-function createEvent (options) {
+function createEvent (req) {
   return {
-    method: options.method,
-    path: options.path,
-    headers: {}
+    httpMethod: req.method,
+    path: url.parse(req.url).path,
+    headers: req.headers
   }
 }
 

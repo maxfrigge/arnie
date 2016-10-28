@@ -1,42 +1,53 @@
 const A = require('../')
+const ServerlessRequestProvider = require('../providers/serverless-request')
+const HttpResponseProvider = require('../providers/http-response')
 
-module.exports = (config) => {
-  const arnie = A(config)
+module.exports = (options) => {
+  // TODO: Allow passing additional providers and options
+  const arnie = A({
+    providers: [
+      HttpResponseProvider(),
+      ServerlessRequestProvider()
+    ]
+  })
   return (task) => {
     return (event, context, cb) => {
-      const input = createInput(event, context)
-      arnie(task, input)
-        // TODO: Transorm reponse from arnie stanard ouput to serverless
+      // We could hide the payload and only pass it to provider factories
+      const payload = createPayload(event, context)
+      return arnie(task, payload)
         .then((result) => {
-          if (typeof context.succeed === 'function') {
-            context.succeed(result.res)
-          }
-          cb(null, result.res)
+          cb(null, createResponse(result))
         })
-        .catch((error) => {
-          cb(error, null)
-        })
+        .catch((error) => cb(error, null))
     }
   }
 }
 
-// TODO: Settle on arnie stanard input e.g. req
-function createInput (event, context) {
+function createPayload (event, context) {
+  // TODO: Consider removing functions from event/context
   return {
-    aws: {
-      event,
-      context
-    },
-    req: {
-      headers: event.headers,
-      method: event.method,
-      url: event.path // TODO: pass the complete url if possible
-    },
-    res: {
-      headers: {},
-      statusCode: undefined,
-      statusMessage: 200,
-      body: undefined
+    serverless: {
+      aws: {
+        event,
+        context
+      }
     }
   }
+}
+
+function createResponse (result) {
+  const response = {
+    statusCode: result.response.statusCode,
+    headers: result.response.headers,
+    body: result.response.body
+  }
+  if (typeof response.body === 'object') {
+    try {
+      response.body = JSON.stringify(response.body)
+    } catch (error) {
+      console.warn(`Unable to stringify response body as json: ${error.message}`)
+      response.body = undefined
+    }
+  }
+  return response
 }

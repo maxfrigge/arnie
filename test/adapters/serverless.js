@@ -4,54 +4,45 @@ const A = require('../../src/adapters/serverless')
 const arnie = A()
 
 test('Arnie (serverless)', (t) => {
-  t.plan(6)
+  t.plan(8)
 
   const actionNum = {
     taskA: 0,
     taskB: 0
   }
-  const testExecution = (group, order) => {
-    t.equal(
-      actionNum[group] += 1,
-      order,
-      `should run each action on request in order (${group} ${order})`
-    )
+  const testExecutionOrder = (group, order) => {
+    t.equal(actionNum[group] += 1, order, `should run each action on request in order (${group} ${order})`)
   }
 
-  const expectedReq = {
-    method: 'GET',
-    url: '/success',
-    headers: {}
-  }
   const taskA = [
     ({input, path}) => {
-      t.deepEqual(
-        input.req,
-        expectedReq,
-        'should pass request information'
-      )
-      testExecution('taskA', 1)
+      testExecutionOrder('taskA', 1)
       return new Promise((resolve) => {
-        setTimeout(
-          () => resolve(path.goHere({someOutput: true})),
-          50
-        )
+        setTimeout(() => resolve(path.goHere({someOutput: true})), 50)
       })
     }, {
       dontGoHere: [
         () => t.fail('should NOT run this action')
       ],
       goHere: [
-        (ctx) => testExecution('taskA', 2)
+        (ctx) => {
+          testExecutionOrder('taskA', 2)
+          return {
+            response: {
+              body: 'OK',
+              statusCode: 200
+            }
+          }
+        }
       ]
     },
-    (ctx) => testExecution('taskA', 3)
+    (ctx) => testExecutionOrder('taskA', 3)
   ]
 
   const expectedError = new Error('error')
   const taskB = [
     (ctx) => {
-      testExecution('taskB', 1)
+      testExecutionOrder('taskB', 1)
       throw expectedError
     }
   ]
@@ -61,22 +52,17 @@ test('Arnie (serverless)', (t) => {
     '/error': arnie(taskB)
   })
 
-  serverless.request({method: 'GET', path: '/error'}, (error, result) => {
-    t.equal(
-      error,
-      expectedError,
-      'should reject failed execution with error'
-    )
+  serverless.request.get('/error').end((error, result) => {
+    if (!error) {
+      t.equal(result.statusCode, 500, 'should send status code 500 on unhandled error')
+    }
   })
 
-  const expectedResult = {someOutput: true}
-  serverless.request({method: 'GET', path: '/success'}, (error, result) => {
+  serverless.request.get('/success').end((error, result) => {
     if (!error) {
-      t.eqaul(
-        result.input.someOutput,
-        expectedResult.someOutput,
-        'should resolve successful execution with final output'
-      )
+      t.equal(actionNum.taskA, 3, 'should complete taskA before request ends')
+      t.equal(result.text, 'OK', 'should send the body')
+      t.equal(result.statusCode, 200, 'should send the status code')
     }
   })
 })
