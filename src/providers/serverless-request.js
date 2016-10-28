@@ -34,11 +34,24 @@ function ServerlessRequest (payload, response) {
     get method () {
       return payload.serverless.aws.event.httpMethod
     },
+    get body () {
+      if (request.is('json')) {
+        try {
+          return JSON.parse(payload.serverless.aws.event.body)
+        } catch (error) {
+          console.warn(`Unable to parse request body as json: ${error.message}`)
+        }
+      }
+      return payload.serverless.aws.event.body
+    },
     get path () {
       return payload.serverless.aws.event.path
     },
     get query () {
-      return payload.serverless.aws.queryStringParameters
+      return payload.serverless.aws.event.queryStringParameters
+    },
+    get params () {
+      return payload.serverless.aws.event.pathParameters
     },
     get host () {
       let host = request.get('x-forwarded-host') || request.get('host')
@@ -127,8 +140,10 @@ function ServerlessRequest (payload, response) {
     },
     get type () {
       const type = request.get('content-type')
-      if (!type) return ''
-      return type.split('')[0]
+      if (!type) {
+        return ''
+      }
+      return type.split(';')[0]
     },
     get (field) {
       const header = request.header
