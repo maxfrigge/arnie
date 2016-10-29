@@ -2,9 +2,9 @@ const get = require('get-value')
 const set = require('set-value')
 
 module.exports = (targetTemplate, valueTemplate) => {
-  return function set (context) {
-    const value = getValue(valueTemplate)
-    setValue(targetTemplate, value)
+  return function set (ctx) {
+    const value = getValue(ctx, valueTemplate)
+    setValue(ctx, targetTemplate, value)
   }
 }
 
@@ -14,6 +14,9 @@ function isContextPath (value) {
 }
 
 function getValue (ctx, path) {
+  if (typeof path === 'function') {
+    path = path(ctx)
+  }
   if (isContextPath(path)) {
     return get(ctx, path.replace(':', '.'))
   }
@@ -24,5 +27,8 @@ function getValue (ctx, path) {
 }
 
 function setValue (ctx, path, value) {
+  if (typeof path === 'function') {
+    path = path(ctx)
+  }
   return set(ctx, path.replace(':', '.'), value)
 }
