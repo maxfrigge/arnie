@@ -35,7 +35,7 @@ test('Arnie', (t) => {
       t.deepEqual(
         output,
         expectedOutput,
-        'should resolve successful execution with final output'
+        'should run function tree and resolve with final payload'
       )
     })
 

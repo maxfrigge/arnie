@@ -3,7 +3,7 @@ const {setupServerless} = require('../utils/serverless')
 const A = require('../../src/adapters/serverless')
 const arnie = A()
 
-test('Arnie (serverless)', (t) => {
+test('Adapter: Serverless', (t) => {
   t.plan(9)
 
   const actionNum = {
@@ -14,9 +14,17 @@ test('Arnie (serverless)', (t) => {
     t.equal(actionNum[group] += 1, order, `should run each action on request in order (${group} ${order})`)
   }
 
+  const expectedError = new Error('error')
   const taskA = [
-    ({input, path}) => {
+    (ctx) => {
       testExecutionOrder('taskA', 1)
+      throw expectedError
+    }
+  ]
+
+  const taskB = [
+    ({input, path}) => {
+      testExecutionOrder('taskB', 1)
       return new Promise((resolve) => {
         setTimeout(() => resolve(path.goHere({someOutput: true})), 50)
       })
@@ -26,25 +34,17 @@ test('Arnie (serverless)', (t) => {
       ],
       goHere: [
         ({response}) => {
-          testExecutionOrder('taskA', 2)
+          testExecutionOrder('taskB', 2)
           response.body = 'text'
         }
       ]
     },
-    (ctx) => testExecutionOrder('taskA', 3)
-  ]
-
-  const expectedError = new Error('error')
-  const taskB = [
-    (ctx) => {
-      testExecutionOrder('taskB', 1)
-      throw expectedError
-    }
+    (ctx) => testExecutionOrder('taskB', 3)
   ]
 
   const serverless = setupServerless({
-    '/success': arnie(taskA),
-    '/error': arnie(taskB)
+    '/error': arnie(taskA),
+    '/success': arnie(taskB)
   })
 
   serverless.request.get('/error').end((error, result) => {
@@ -55,7 +55,7 @@ test('Arnie (serverless)', (t) => {
 
   serverless.request.get('/success').end((error, result) => {
     if (!error) {
-      t.equal(actionNum.taskA, 3, 'should complete taskA before request ends')
+      t.equal(actionNum.taskB, 3, 'should complete taskB before request ends')
       t.equal(result.text, 'text', 'should send the body')
       t.equal(result.statusCode, 200, 'should send the status code')
       t.equal(result.headers['content-type'], 'text/plain; charset=utf-8', 'should send the content type')

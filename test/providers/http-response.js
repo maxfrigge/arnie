@@ -5,7 +5,7 @@ const arnie = A({
   providers: [HttpReponse()]
 })
 
-test('Arnie (http-response)', (t) => {
+test('Provider: HttpReponse', (t) => {
   t.plan(2)
 
   arnie([

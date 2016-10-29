@@ -5,7 +5,7 @@ const arnie = A({
   providers: [ServerlessRequest()]
 })
 
-test('Arnie (serverless-request)', (t) => {
+test('Provider: ServerlessRequest', (t) => {
   t.plan(9)
 
   const payload = {
