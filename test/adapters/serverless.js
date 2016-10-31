@@ -1,10 +1,16 @@
 const test = require('tape')
 const {setupServerless} = require('../utils/serverless')
 const A = require('../../src/adapters/serverless')
-const arnie = A()
 
 test('Adapter: Serverless', (t) => {
-  t.plan(9)
+  t.plan(10)
+
+  const arnie = A({providers: [
+    (context) => {
+      context.anotherProvider = 'test'
+      return context
+    }
+  ]})
 
   const actionNum = {
     taskA: 0,
@@ -17,6 +23,7 @@ test('Adapter: Serverless', (t) => {
   const expectedError = new Error('error')
   const taskA = [
     (ctx) => {
+      t.equal(ctx.anotherProvider, 'test', 'should pass additional providers to function-tree')
       testExecutionOrder('taskA', 1)
       throw expectedError
     }

@@ -3,13 +3,19 @@ const ServerlessRequestProvider = require('../providers/serverless-request')
 const HttpResponseProvider = require('../providers/http-response')
 
 module.exports = (options) => {
-  // TODO: Allow passing additional providers and options
+  const providers = [
+    HttpResponseProvider(),
+    ServerlessRequestProvider()
+  ]
+
+  if (Array.isArray(options.providers)) {
+    providers.push(...options.providers)
+  }
+
   const arnie = A({
-    providers: [
-      HttpResponseProvider(),
-      ServerlessRequestProvider()
-    ]
+    providers
   })
+
   return (task) => {
     return (event, context, cb) => {
       // We could hide the payload and only pass it to provider factories
