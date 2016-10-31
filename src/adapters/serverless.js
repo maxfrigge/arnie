@@ -24,7 +24,10 @@ module.exports = (options = {}) => {
         .then((result) => {
           cb(null, createResponse(result))
         })
-        .catch((error) => cb(error, null))
+        .catch((error) => {
+          console.error(error)
+          cb(error, null)
+        })
     }
   }
 }
