@@ -2,7 +2,7 @@ const A = require('../')
 const ServerlessRequestProvider = require('../providers/serverless-request')
 const HttpResponseProvider = require('../providers/http-response')
 
-module.exports = (options) => {
+module.exports = (options = {}) => {
   const providers = [
     HttpResponseProvider(),
     ServerlessRequestProvider()
