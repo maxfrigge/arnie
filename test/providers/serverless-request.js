@@ -6,7 +6,7 @@ const arnie = A({
 })
 
 test('Provider: ServerlessRequest', (t) => {
-  t.plan(9)
+  t.plan(10)
 
   const payload = {
     serverless: {
@@ -53,6 +53,7 @@ test('Provider: ServerlessRequest', (t) => {
       t.equal(request.type, 'application/json', 'should expose the content the type')
       t.assert(request.is('json'), 'should allow to check the content type')
       t.deepEqual(request.body, {foo: 'BAR', bar: 123}, 'should parse a json body')
+      t.equal(request.rawBody, '{\n\t"foo": "BAR",\n\t"bar": 123\n}', 'should provide raw body')
     }
   ], payload)
   .catch(console.error)

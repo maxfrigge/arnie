@@ -37,11 +37,14 @@ function ServerlessRequest (payload, response) {
     get body () {
       if (request.is('json')) {
         try {
-          return JSON.parse(payload.serverless.aws.event.body)
+          return JSON.parse(request.rawBody)
         } catch (error) {
           console.warn(`Unable to parse request body as json: ${error.message}`)
         }
       }
+      return request.rawBody
+    },
+    get rawBody () {
       return payload.serverless.aws.event.body
     },
     get path () {
