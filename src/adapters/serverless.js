@@ -25,7 +25,8 @@ module.exports = (options = {}) => {
           cb(null, createResponse(result))
         })
         .catch((error) => {
-          console.error(error)
+          // TODO: Find a better way to make errors visible
+          // console.error(error)
           cb(error, null)
         })
     }

@@ -97,7 +97,9 @@ function ServerlessRequest (payload, response) {
     },
     get length () {
       const len = request.get('content-length')
-      if (len === '') return
+      if (len === '') {
+        return
+      }
       return ~~len
     },
     get protocol () {
@@ -165,12 +167,17 @@ function ServerlessRequest (payload, response) {
 
 function getHeaders (payload) {
   const obj = payload.serverless.aws.event.headers
+  const body = payload.serverless.aws.event.body
   const keys = Object.keys(obj)
   const header = {}
   let n = keys.length
   while (n--) {
     const key = keys[n]
     header[key.toLowerCase()] = obj[key]
+  }
+  // https://github.com/jshttp/type-is/issues/5
+  if (!header['content-length'] && typeof body === 'string') {
+    header['content-length'] = body.length
   }
   return header
 }
