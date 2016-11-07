@@ -1,11 +1,13 @@
 const A = require('../')
 const ServerlessRequestProvider = require('../providers/serverless-request')
 const HttpResponseProvider = require('../providers/http-response')
+const OutputProvider = require('../providers/output')
 
 module.exports = (options = {}) => {
   const providers = [
     HttpResponseProvider(),
-    ServerlessRequestProvider()
+    ServerlessRequestProvider(),
+    OutputProvider()
   ]
 
   if (Array.isArray(options.providers)) {
