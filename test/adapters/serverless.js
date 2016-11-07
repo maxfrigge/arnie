@@ -23,9 +23,9 @@ test('Adapter: Serverless', (t) => {
   const expectedError = new Error('error')
   const taskA = [
     (ctx) => {
-      t.assert(typeof ctx.output, 'should provide output in context')
-      t.assert(typeof ctx.request, 'should provide request in context')
-      t.assert(typeof ctx.response, 'should provide reponse in context')
+      t.assert(ctx.output, 'should provide output in context')
+      t.assert(ctx.request, 'should provide request in context')
+      t.assert(ctx.response, 'should provide reponse in context')
       t.equal(ctx.anotherProvider, 'test', 'should pass additional providers to function-tree')
       testExecutionOrder('taskA', 1)
       throw expectedError
