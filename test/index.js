@@ -15,7 +15,7 @@ test('Arnie', (t) => {
   t.assert(operators.when, 'should offer: const {when} = require(arnie/operators)')
   t.assert(operators.when, 'should offer: const {when} = require(arnie/operators)')
   t.assert(providers.HttpResponseProvider, 'should offer: const {HttpResponseProvider} = require(arnie/providers)')
-  t.assert(providers.Output, 'should offer: const {Output} = require(arnie/providers)')
+  t.assert(providers.OutputProvider, 'should offer: const {OutputProvider} = require(arnie/providers)')
   t.assert(providers.ServerlessRequestProvider, 'should offer: const {ServerlessRequestProvider} = require(arnie/providers)')
 
   const inititalData = {foo: 'bar'}
