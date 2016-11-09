@@ -1,6 +1,6 @@
 {
   "name": "arnie",
-  "version": "0.2.16",
+  "version": "0.2.17",
   "description": "Action hero for backends",
   "main": "index.js",
   "scripts": {
