@@ -8,7 +8,7 @@ module.exports = (valueTemplate, inputPath, task) => {
     const items = getValue(ctx, valueTemplate)
     const promises = items.map(
       (item) => {
-        const payload = Object.assign({}, ctx.input)
+        const payload = JSON.parse(JSON.stringify(ctx.input))
         set(payload, inputPath, item)
         return execute(providers, payload, task)
       }

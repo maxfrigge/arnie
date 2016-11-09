@@ -10,20 +10,26 @@ test('Operator: forEach', (t) => {
   const task = [
     forEach('input:list', 'item', [
       ({input}) => {
-        num += 1
-        t.pass(`should execute a new function-tree for each item ${num}/2`)
-        t.assert(!input.localOutput, `should isolate payload of each function-tree ${num}/2`)
-        return {localOutput: true}
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            num += 1
+            t.pass(`should execute a new function-tree for iteration ${num}/2`)
+            t.assert(input.deep.param.value === 1, `should use isolated payload for iteration ${num}/2`)
+            input.deep.param.value += 1
+            resolve(input)
+          }, Math.random() * 300 + 50)
+        })
       }
     ]),
     ({input}) => {
       t.assert(num === 2, 'finish iteration before next action')
-      t.assert(!input.localOutput, 'should use isolated payload')
+      t.assert(input.deep.param.value === 1, 'should use isolated payload')
     }
   ]
 
   const payload = {
-    list: [1, 2]
+    list: [1, 2],
+    deep: {param: {value: 1}}
   }
   arnie(task, payload).catch(console.error)
 })
