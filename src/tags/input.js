@@ -1,8 +1,8 @@
-const ContextTag = require('./context')
+const Tag = require('./tag')
 
-class InputTag extends ContextTag {
+class InputTag extends Tag {
   constructor (strings, values) {
-    super('input', {}, strings, values)
+    super('input', strings, values)
   }
 }
 
