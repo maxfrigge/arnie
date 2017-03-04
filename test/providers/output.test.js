@@ -1,11 +1,11 @@
-const test = require('tape')
+const t = require('tap')
 const A = require('../../src')
 const Output = require('../../src/providers/output')
 const arnie = A({
   providers: [Output()]
 })
 
-test('Provider: Output', (t) => {
+t.test('Provider: Output', (t) => {
   t.plan(2)
 
   arnie([

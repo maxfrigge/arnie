@@ -1,11 +1,11 @@
-const test = require('tape')
+const t = require('tap')
 const A = require('../../src')
 const HttpReponse = require('../../src/providers/http-response')
 const arnie = A({
   providers: [HttpReponse()]
 })
 
-test('Provider: HttpReponse', (t) => {
+t.test('Provider: HttpReponse', (t) => {
   t.plan(2)
 
   arnie([

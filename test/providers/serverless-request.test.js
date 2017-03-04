@@ -1,11 +1,11 @@
-const test = require('tape')
+const t = require('tap')
 const A = require('../../src')
 const ServerlessRequest = require('../../src/providers/serverless-request')
 const arnie = A({
   providers: [ServerlessRequest()]
 })
 
-test('Provider: ServerlessRequest', (t) => {
+t.test('Provider: ServerlessRequest', (t) => {
   t.plan(10)
 
   const payload = {
@@ -21,9 +21,9 @@ test('Provider: ServerlessRequest', (t) => {
             'Host': 'thal9f3ckh.execute-api.eu-central-1.amazonaws.com',
             'Via': '1.1 8008015354a3ca72f56c382a1d1cfe9f.cloudfront.net (CloudFront)'
           },
-         queryStringParameters: {test: '132'},
-         pathParameters: {test: '456'},
-         stageVariables: null, // TODO: Check how passed and test
+          queryStringParameters: {test: '132'},
+          pathParameters: {test: '456'},
+          stageVariables: null, // TODO: Check how passed and test
           requestContext: {
             accountId: '756919022514',
             resourceId: 't086e5',

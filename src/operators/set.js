@@ -1,34 +1,29 @@
-const get = require('get-value')
-const set = require('set-value')
-
-module.exports = (targetTemplate, valueTemplate) => {
+module.exports = (target, value) => {
   return function set (ctx) {
-    const value = getValue(ctx, valueTemplate)
-    setValue(ctx, targetTemplate, value)
+    setValue(
+      ctx,
+      target,
+      getValue(ctx, value)
+    )
   }
 }
 
-function isContextPath (value) {
-  const regexp = /^[a-z]+:/gi
-  return regexp.test(value)
+function getValue (ctx, resolver) {
+  if (typeof resolver === 'function') {
+    return resolver(ctx)
+  }
+  if (typeof resolver === 'object') {
+    return resolver.getValue(ctx)
+  }
+
+  return resolver
 }
 
-function getValue (ctx, path) {
-  if (typeof path === 'function') {
-    path = path(ctx)
+function setValue (ctx, resolver, value) {
+  if (typeof resolver === 'function') {
+    resolver(ctx, value)
   }
-  if (isContextPath(path)) {
-    return get(ctx, path.replace(':', '.'))
+  if (typeof resolver === 'object') {
+    resolver.setValue(ctx, value)
   }
-  if (typeof path === 'string') {
-    return path.replace(/\\:/g, ':')
-  }
-  return path
-}
-
-function setValue (ctx, path, value) {
-  if (typeof path === 'function') {
-    path = path(ctx)
-  }
-  return set(ctx, path.replace(':', '.'), value)
 }

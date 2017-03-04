@@ -1,3 +1,5 @@
+// TODO: Refactor to use tags!
+
 const A = require('../')
 const get = require('get-value')
 const set = require('set-value')

@@ -1,8 +1,8 @@
-const test = require('tape')
+const t = require('tap')
 const {setupServerless} = require('../utils/serverless')
 const A = require('../../src/adapters/serverless')
 
-test('Adapter: Serverless', (t) => {
+t.test('Adapter: Serverless', (t) => {
   t.plan(13)
 
   const arnie = A({providers: [
@@ -20,7 +20,6 @@ test('Adapter: Serverless', (t) => {
     t.equal(actionNum[group] += 1, order, `should run each action on request in order (${group} ${order})`)
   }
 
-  const expectedError = new Error('error')
   const taskA = [
     (ctx) => {
       t.assert(ctx.output, 'should provide output in context')
@@ -28,7 +27,7 @@ test('Adapter: Serverless', (t) => {
       t.assert(ctx.response, 'should provide reponse in context')
       t.equal(ctx.anotherProvider, 'test', 'should pass additional providers to function-tree')
       testExecutionOrder('taskA', 1)
-      throw expectedError
+      throw new Error('Error in taskA')
     }
   ]
 

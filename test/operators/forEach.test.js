@@ -1,9 +1,9 @@
-const test = require('tape')
+const t = require('tap')
 const A = require('../../src')
 const arnie = A()
 const forEach = require('../../src/operators/forEach')
 
-test('Operator: forEach', (t) => {
+t.test('Operator: forEach', (t) => {
   t.plan(6)
 
   let num = 0
@@ -17,7 +17,7 @@ test('Operator: forEach', (t) => {
             t.assert(input.deep.param.value === 1, `should use isolated payload for iteration ${num}/2`)
             input.deep.param.value += 1
             resolve(input)
-          }, Math.random() * 300 + 50)
+          }, (Math.random() * 300) + 50)
         })
       }
     ]),

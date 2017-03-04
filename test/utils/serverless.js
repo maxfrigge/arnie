@@ -12,6 +12,7 @@ module.exports.setupServerless = (functions) => {
     if (typeof fn !== 'function') {
       throw new Error(`No function for path ${awsEvent.path} defined!`)
     }
+
     fn(awsEvent, awsContext, (error, response) => {
       //  console.log('SLS: callback', error, response)
       if (error) {
@@ -19,7 +20,6 @@ module.exports.setupServerless = (functions) => {
         res.end(error.message)
         return
       }
-
       res.writeHead(response.statusCode, response.headers)
       res.end(response.body)
     })
