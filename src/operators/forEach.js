@@ -1,26 +1,22 @@
 // TODO: Refactor to use tags!
 
 const A = require('../')
-const get = require('get-value')
 const set = require('set-value')
 
-module.exports = (valueTemplate, inputPath, task) => {
+module.exports = (inputTag, outputPath, task) => {
   return function forEach (ctx) {
     const providers = ctx.execution.functionTree.contextProviders
-    const items = getValue(ctx, valueTemplate)
+    const items = getValue(ctx, inputTag)
     const promises = items.map(
       (item) => {
         const payload = JSON.parse(JSON.stringify(ctx.input))
-        set(payload, inputPath, item)
+        set(payload, outputPath, item)
         return execute(providers, payload, task)
       }
     )
     return Promise
       .all(promises)
-      .then((result) => {
-        // Don't merge result back for now
-        return
-      })
+      .then((result) => undefined) // Don't merge output back
   }
 }
 
@@ -31,20 +27,13 @@ function execute (providers, payload, task) {
   return arnie(task, payload)
 }
 
-function isContextPath (value) {
-  const regexp = /^[a-z]+:/gi
-  return regexp.test(value)
-}
+function getValue (ctx, resolver) {
+  if (typeof resolver === 'function') {
+    return resolver(ctx)
+  }
+  if (typeof resolver === 'object') {
+    return resolver.getValue(ctx)
+  }
 
-function getValue (ctx, path) {
-  if (typeof path === 'function') {
-    path = path(ctx)
-  }
-  if (isContextPath(path)) {
-    return get(ctx, path.replace(':', '.'))
-  }
-  if (typeof path === 'string') {
-    return path.replace(/\\:/g, ':')
-  }
-  return path
+  return resolver
 }
