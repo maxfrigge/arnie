@@ -6,9 +6,21 @@
 
 [![NPM version][npm-image]][npm-url]
 
+## Sample
+
+```js
+// TODO: Add code sample
+```
+
 ## Operators
 
 Best case: most operators are provided by function-tree.
+
+## Providers
+
+- request
+- response
+- output
 
 ## Adapters
 
