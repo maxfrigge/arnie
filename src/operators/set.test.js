@@ -2,17 +2,17 @@ const t = require('tap')
 const A = require('../')
 const arnie = A()
 const set = require('./set')
-const input = require('../tags/input')
+const props = require('../tags/props')
 
 t.test('Operator: set', (t) => {
   t.plan(1)
 
   const task = [
-    set(({input}, value) => {
-      input.foo = value
+    set(({props}, value) => {
+      props.foo = value
     }, '100'),
-    set(input`another.target`, input`foo`),
-    set(input`yet.another.target`, ({input}) => parseInt(input.foo, 10) * 2)
+    set(props`another.target`, props`foo`),
+    set(props`yet.another.target`, ({props}) => parseInt(props.foo, 10) * 2)
   ]
 
   const expectedResult = {

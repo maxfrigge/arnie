@@ -1,11 +1,11 @@
 const Tag = require('./tag')
 
-class InputTag extends Tag {
+class PropsTag extends Tag {
   constructor (strings, values) {
-    super('input', strings, values)
+    super('props', strings, values)
   }
 }
 
 module.exports = (strings, ...values) => {
-  return new InputTag(strings, values)
+  return new PropsTag(strings, values)
 }

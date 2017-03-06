@@ -1,5 +1,6 @@
 const t = require('tap')
 const A = require('../src')
+const {sequence, parallel} = require('../src')
 const arnie = A()
 
 // const operators = require('../operators')
@@ -7,7 +8,7 @@ const arnie = A()
 // const serverless = require('../serverless')
 
 t.test('Arnie', (t) => {
-  t.plan(4)
+  t.plan(5)
 
   // t.assert(serverless, 'should expose: const serverless = require(arnie/serverless)')
   // t.assert(operators.forEach, 'should expose: const {forEach} = require(arnie/operators)')
@@ -18,30 +19,51 @@ t.test('Arnie', (t) => {
   // t.assert(providers.OutputProvider, 'should expose: const {OutputProvider} = require(arnie/providers)')
   // t.assert(providers.ServerlessRequestProvider, 'should expose: const {ServerlessRequestProvider} = require(arnie/providers)')
 
+  let parallelCount = 0
   const inititalData = {foo: 'bar'}
   const mutation = {foo: 'mutated'}
   const expectedOutput = {
     foo: mutation.foo,
     bar: 'foo'
   }
-  const task = [
-    ({input}) => {
+
+  const task = sequence([
+    ({props}) => {
       t.deepEqual(
-        input,
+        props,
         inititalData,
-        'should execute first action with initital input'
+        'should execute first action with initital props'
       )
       return Promise.resolve(mutation)
     },
-    ({input}) => {
+    ({props}) => {
       t.deepEqual(
-        input,
+        props,
         mutation,
-        'should execute subsequent action with mutated input'
+        'should execute subsequent action with mutated props'
       )
       return {bar: expectedOutput.bar}
-    }
-  ]
+    },
+    parallel([
+      ({props}) => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            parallelCount += 1
+            t.assert(parallelCount === 2, 'should allow parallel execution')
+            resolve()
+          }, 100)
+        })
+      },
+      ({props}) => {
+        return new Promise((resolve) => {
+          setTimeout(() => {
+            parallelCount += 1
+            resolve()
+          }, 1)
+        })
+      }
+    ])
+  ])
 
   arnie(task, inititalData)
     .then((output) => {

@@ -20,3 +20,6 @@ module.exports = (options = {}) => {
     })
   }
 }
+
+module.exports.sequence = require('function-tree').sequence
+module.exports.parallel = require('function-tree').parallel

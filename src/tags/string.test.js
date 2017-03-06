@@ -1,15 +1,15 @@
 const t = require('tap')
 const string = require('./string')
-const input = require('./input')
+const props = require('./props')
 
 t.test('Tag: string', (t) => {
   const context = {
-    input: {
+    props: {
       foo: 'bar'
     }
   }
 
-  const tag = string`foo.${input`foo`}`
+  const tag = string`foo.${props`foo`}`
   t.equals(tag.getValue(context), 'foo.bar', 'should create a string with nested tags')
 
   // TODO: should throw!

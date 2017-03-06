@@ -32,7 +32,7 @@ t.test('Adapter: Serverless', (t) => {
   ]
 
   const taskB = [
-    ({input, path}) => {
+    ({props, path}) => {
       testExecutionOrder('taskB', 1)
       return new Promise((resolve) => {
         setTimeout(() => resolve(path.goHere({someOutput: true})), 50)

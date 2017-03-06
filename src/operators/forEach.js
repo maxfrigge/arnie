@@ -3,13 +3,13 @@
 const A = require('../')
 const set = require('set-value')
 
-module.exports = (inputTag, outputPath, task) => {
+module.exports = (propsTag, outputPath, task) => {
   return function forEach (ctx) {
     const providers = ctx.execution.functionTree.contextProviders
-    const items = getValue(ctx, inputTag)
+    const items = getValue(ctx, propsTag)
     const promises = items.map(
       (item) => {
-        const payload = JSON.parse(JSON.stringify(ctx.input))
+        const payload = JSON.parse(JSON.stringify(ctx.props))
         set(payload, outputPath, item)
         return execute(providers, payload, task)
       }

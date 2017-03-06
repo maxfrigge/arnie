@@ -13,13 +13,13 @@ t.test('Provider: Output', (t) => {
     ({output}) => {
       return output({test: 'path-not-defined'})
     },
-    ({input, output}) => {
-      t.deepEqual(input, {test: 'path-not-defined'}, 'should return output when no matching path defined')
+    ({props, output}) => {
+      t.deepEqual(props, {test: 'path-not-defined'}, 'should return output when no matching path defined')
       return output({test: 'path-defined'})
     }, {
       test: [
-        ({input}) => {
-          t.deepEqual(input, {test: 'path-defined'}, 'should trigger path when defined')
+        ({props}) => {
+          t.deepEqual(props, {test: 'path-defined'}, 'should trigger path when defined')
         }
       ]
     }

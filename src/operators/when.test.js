@@ -2,13 +2,13 @@ const t = require('tap')
 const A = require('../')
 const arnie = A()
 const when = require('./when')
-const input = require('../tags/input')
+const props = require('../tags/props')
 
 t.test('Operator: when', (t) => {
   t.plan(5)
 
   const task = [
-    when(({input}) => input.path.truthy), {
+    when(({props}) => props.path.truthy), {
       true: [
         () => {
           t.pass('should trigger path "true" when truthy')
@@ -20,7 +20,7 @@ t.test('Operator: when', (t) => {
         }
       ]
     },
-    when(input`path.falsy`), {
+    when(props`path.falsy`), {
       true: [
         () => {
           t.fail('should NOT trigger this path')
@@ -32,7 +32,7 @@ t.test('Operator: when', (t) => {
         }
       ]
     },
-    when(({input}) => input.path.number > 5), {
+    when(({props}) => props.path.number > 5), {
       true: [
         () => {
           t.pass('should evaluate function to true or false path')
@@ -44,7 +44,7 @@ t.test('Operator: when', (t) => {
         }
       ]
     },
-    when(input`path.foo`), {
+    when(props`path.foo`), {
       bar: [
         () => {
           t.pass('should trigger path where path name matches value')
@@ -56,7 +56,7 @@ t.test('Operator: when', (t) => {
         }
       ]
     },
-    when(input`path.bar`), {
+    when(props`path.bar`), {
       foo: [
         () => {
           t.fail('should NOT trigger this path')
