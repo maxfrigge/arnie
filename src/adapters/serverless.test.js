@@ -1,6 +1,6 @@
 const t = require('tap')
-const {setupServerless} = require('../utils/serverless')
-const A = require('../../src/adapters/serverless')
+const ServerlessEndpoint = require('../test/serverless-endpoint')
+const A = require('./serverless')
 
 t.test('Adapter: Serverless', (t) => {
   t.plan(13)
@@ -51,18 +51,18 @@ t.test('Adapter: Serverless', (t) => {
     (ctx) => testExecutionOrder('taskB', 3)
   ]
 
-  const serverless = setupServerless({
+  const serverless = ServerlessEndpoint({
     '/error': arnie(taskA),
     '/success': arnie(taskB)
   })
 
-  serverless.request.get('/error').end((error, result) => {
+  serverless.get('/error').end((error, result) => {
     if (!error) {
       t.equal(result.statusCode, 500, 'should send status code 500 on unhandled error')
     }
   })
 
-  serverless.request.get('/success').end((error, result) => {
+  serverless.get('/success').end((error, result) => {
     if (!error) {
       t.equal(actionNum.taskB, 3, 'should complete taskB before request ends')
       t.equal(result.text, 'text', 'should send the body')

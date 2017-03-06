@@ -1,5 +1,5 @@
 const t = require('tap')
-const input = require('../../src/tags/input')
+const input = require('./input')
 
 t.test('Tag: input', (t) => {
   const context = {

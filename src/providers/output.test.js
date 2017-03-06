@@ -1,6 +1,7 @@
 const t = require('tap')
-const A = require('../../src')
-const Output = require('../../src/providers/output')
+const A = require('../')
+const Output = require('./output')
+
 const arnie = A({
   providers: [Output()]
 })

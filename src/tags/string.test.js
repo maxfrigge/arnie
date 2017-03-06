@@ -1,6 +1,6 @@
 const t = require('tap')
-const string = require('../../src/tags/string')
-const input = require('../../src/tags/input')
+const string = require('./string')
+const input = require('./input')
 
 t.test('Tag: string', (t) => {
   const context = {

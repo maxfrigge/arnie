@@ -1,8 +1,8 @@
 const t = require('tap')
-const A = require('../../src')
+const A = require('../')
 const arnie = A()
-const set = require('../../src/operators/set')
-const input = require('../../src/tags/input')
+const set = require('./set')
+const input = require('../tags/input')
 
 t.test('Operator: set', (t) => {
   t.plan(1)

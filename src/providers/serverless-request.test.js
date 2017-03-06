@@ -1,6 +1,6 @@
 const t = require('tap')
-const A = require('../../src')
-const ServerlessRequest = require('../../src/providers/serverless-request')
+const A = require('../')
+const ServerlessRequest = require('./serverless-request')
 const arnie = A({
   providers: [ServerlessRequest()]
 })

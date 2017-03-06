@@ -1,6 +1,7 @@
 const t = require('tap')
-const A = require('../../src')
-const HttpReponse = require('../../src/providers/http-response')
+const A = require('../')
+const HttpReponse = require('./http-response')
+
 const arnie = A({
   providers: [HttpReponse()]
 })

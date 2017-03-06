@@ -1,8 +1,8 @@
 const t = require('tap')
-const A = require('../../src')
+const A = require('../')
 const arnie = A()
-const when = require('../../src/operators/when')
-const input = require('../../src/tags/input')
+const when = require('./when')
+const input = require('../tags/input')
 
 t.test('Operator: when', (t) => {
   t.plan(5)

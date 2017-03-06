@@ -1,8 +1,8 @@
 const t = require('tap')
-const A = require('../../src')
+const A = require('../')
 const arnie = A()
-const input = require('../../src/tags/input')
-const forEach = require('../../src/operators/forEach')
+const input = require('../tags/input')
+const forEach = require('./forEach')
 
 t.test('Operator: forEach', (t) => {
   t.plan(8)

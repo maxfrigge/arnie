@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "standard 'src/**/*.js' 'test/**/*.js'",
     "pretest-disabled": "npm run lint",
-    "test": "tap 'test/**/*.test.js' --coverage",
+    "test": "tap 'src/**/*.test.js' --coverage",
     "test:one": "tap --coverage",
     "test:watch": "watch 'npm test' --ignoreDirectoryPattern='/node_modules/i' --ignoreDotFiles",
     "build": "rimraf lib && BABEL_ENV=production babel src/ --out-dir=lib/",
@@ -34,6 +34,7 @@
     "get-value": "^2.0.6",
     "koa-is-json": "^1.0.0",
     "mime-types": "^2.1.12",
+    "path-to-regexp": "^1.7.0",
     "set-value": "^0.4.0",
     "statuses": "^1.3.0",
     "type-is": "^1.6.13",
