@@ -5,3 +5,4 @@ lib
 backup
 dist
 .nyc_output
+coverage

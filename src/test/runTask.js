@@ -1,8 +1,10 @@
 const A = require('arnie')
 
-module.exports.runTask = (task, providers = []) => {
+function runTask (task, providers = []) {
   const arnie = A({
     providers
   })
   return arnie(task)
 }
+
+module.exports = runTask
