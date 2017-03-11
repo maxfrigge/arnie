@@ -8,7 +8,7 @@ const arnie = A()
 // const serverless = require('../serverless')
 
 t.test('Arnie', (t) => {
-  t.plan(5)
+  t.plan(6)
 
   // t.assert(serverless, 'should expose: const serverless = require(arnie/serverless)')
   // t.assert(operators.forEach, 'should expose: const {forEach} = require(arnie/operators)')
@@ -72,6 +72,17 @@ t.test('Arnie', (t) => {
         expectedOutput,
         'should run function tree and resolve with final payload'
       )
+    })
+
+  const abort = [
+    ({execution}) => Promise.resolve(execution.abort()),
+    () => {
+      t.fail('should not continue')
+    }
+  ]
+  arnie(abort, inititalData)
+    .then((output) => {
+      t.pass('should end when aborting execution')
     })
 
   const expectedError = new Error('error')
