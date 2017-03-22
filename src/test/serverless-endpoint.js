@@ -28,6 +28,7 @@ function createTestEndpoint (router) {
 
         route.handler(awsEvent, awsContext, (error, response) => {
           if (error) {
+            console.log(error)
             res.statusCode = 500
             res.end()
             return
